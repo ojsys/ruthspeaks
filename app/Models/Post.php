@@ -66,10 +66,11 @@ class Post {
         if ($where) { $sql .= ' WHERE ' . implode(' AND ', $where); }
         $sql .= ' ORDER BY p.published_at DESC, p.created_at DESC LIMIT :lim OFFSET :off';
         $stmt = $pdo->prepare($sql);
-        foreach ($params as $k=>$v) { $stmt->bindValue($k, $v); }
-        $stmt->bindValue(':lim', $limit, PDO::PARAM_INT);
-        $stmt->bindValue(':off', $offset, PDO::PARAM_INT);
-        $stmt->execute();
+        // Bind all parameters including limit and offset
+        $params[':lim'] = $limit;
+        $params[':off'] = $offset;
+        // Execute with all params at once
+        $stmt->execute($params);
         return $stmt->fetchAll();
     }
 

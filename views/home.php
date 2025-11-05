@@ -74,7 +74,7 @@
             <?php endif; ?>
             <div class="card-body">
               <?php if (!empty($p['category_name'])): ?>
-                <div class="card-meta" style="color: var(--primary); font-weight: 600; margin-bottom: 8px;"><?= e($p['category_name']) ?></div>
+                <div class="card-category"><?= e($p['category_name']) ?></div>
               <?php endif; ?>
               <a href="/post/<?= e($p['slug']) ?>" class="card-title"><?= e($p['title']) ?></a>
               <div class="card-meta">
