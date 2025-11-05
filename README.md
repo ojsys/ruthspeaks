@@ -22,7 +22,7 @@ Structure
 Quick Start (cPanel)
 1) Create a MySQL database and user in cPanel.
 2) Import `migrations/001_schema.sql` (and optionally `002_seed.sql`).
-3) Edit `app/Config.php` with your DB credentials and site settings.
+3) Copy `.env.example` to `.env` and fill in values (DB creds, admin email/hash, site/base URL, ads, thresholds). `.env` is git-ignored.
 4) Upload contents of `public/` into `public_html/`.
 5) Upload `app/`, `views/`, and `migrations/` alongside `public_html/` or into a protected folder.
    - If you must keep everything under public_html, add a `.htaccess` to deny access to `app/` and `migrations/`.
@@ -46,8 +46,8 @@ Security Notes
 - Uses PDO with prepared statements.
 - Basic session auth for admin stubs.
 - CSRF protection added where forms are present; API expects same-origin calls.
+- Secrets and environment: configuration reads from `.env` (see `.env.example`).
 
 Customization
 - Colors, fonts: see `public/assets/css/styles.css`.
 - Ad slots: see `views/partials/ad_slot.php` and usage in templates.
-

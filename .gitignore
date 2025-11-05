@@ -1,0 +1,11 @@
+# Environment and secrets
+.env
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+
+# Uploaded assets (keep .htaccess)
+public/uploads/*
+!public/uploads/.htaccess
+
