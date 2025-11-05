@@ -1,9 +1,23 @@
 <?php
 declare(strict_types=1);
 
-session_start();
+// EARLY logging setup to catch parse/compile errors
+$__BASE_PATH = dirname(__DIR__);
+$__LOG_DIR = $__BASE_PATH . '/storage/logs';
+if (!is_dir($__LOG_DIR)) { @mkdir($__LOG_DIR, 0775, true); }
+@ini_set('log_errors', '1');
+@ini_set('error_log', $__LOG_DIR . '/errors.log');
+@error_reporting(E_ALL);
+register_shutdown_function(function() use ($__LOG_DIR){
+    $e = error_get_last();
+    if ($e && in_array($e['type'], [E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR])) {
+        $line = '['.date('Y-m-d H:i:s').'] FATAL: '.$e['message'].' {"file":"'.$e['file'].'","line":'.$e['line'].'}'."\n";
+        @file_put_contents($__LOG_DIR . '/errors.log', $line, FILE_APPEND | LOCK_EX);
+    }
+});
 
-define('BASE_PATH', dirname(__DIR__));
+session_start();
+define('BASE_PATH', $__BASE_PATH);
 
 require_once BASE_PATH . '/app/Config.php';
 require_once BASE_PATH . '/app/Autoload.php';
@@ -12,8 +26,6 @@ require_once BASE_PATH . '/app/ErrorHandling.php';
 require_once BASE_PATH . '/app/Database.php';
 require_once BASE_PATH . '/app/Helpers.php';
 require_once BASE_PATH . '/app/Request.php';
-
-// With the autoloader we don't need to require controllers, but it's fine either way.
 
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ?: '/';
 $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
@@ -40,6 +52,8 @@ if ($uri === '/api/unlock' && $method === 'POST') { \App\Controllers\ApiControll
 if ($uri === '/api/upload' && $method === 'POST') { \App\Controllers\UploadController::upload(); exit; }
 if ($uri === '/api/subscribe' && $method === 'POST') { \App\Controllers\NewsletterController::subscribe(); exit; }
 if ($uri === '/health' && $method === 'GET') { \App\Controllers\HealthController::check(); exit; }
+if (\App\APP_DEBUG && $uri === '/debug/status' && $method === 'GET') { \App\Controllers\DebugController::status(); exit; }
+if (\App\APP_DEBUG && $uri === '/debug/trigger' && $method === 'GET') { \App\Controllers\DebugController::trigger(); exit; }
 
 // Sitemap
 if ($uri === '/sitemap.xml' && $method === 'GET') { \App\Controllers\FeedController::sitemap(); exit; }
@@ -73,7 +87,7 @@ if ($uri === '/admin/logs') { \App\Controllers\AdminLogsController::show(); exit
 
 // 404
 http_response_code(404);
-\App\Logger::warning('Route not found');
+\App\Logger::warning('Route not found', ['uri'=>$uri, 'method'=>$method]);
 echo \App\view('layout', [
     'title' => 'Not Found',
     'content' => '<div class="container"><h1>404 Not Found</h1><p>The page you requested does not exist.</p></div>'

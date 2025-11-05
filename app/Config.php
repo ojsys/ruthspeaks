@@ -6,6 +6,9 @@ namespace App;
 require_once __DIR__ . '/Env.php';
 Env::load(defined('BASE_PATH') ? BASE_PATH . '/.env' : null);
 
+// App
+define(__NAMESPACE__ . '\\APP_DEBUG', Env::bool('APP_DEBUG', false));
+
 // Database
 define(__NAMESPACE__ . '\\DB_HOST', Env::get('DB_HOST', 'localhost'));
 define(__NAMESPACE__ . '\\DB_NAME', Env::get('DB_NAME', 'your_db_name'));

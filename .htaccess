@@ -9,6 +9,9 @@ RewriteRule ^(?:\.env(?:\..*)?|composer\.(?:json|lock)|package\.json|yarn\.lock|
 RewriteRule \.sql$ - [F,L]
 RewriteRule \.sqlite3?$ - [F,L]
 
+# Friendly 500 page
+ErrorDocument 500 /public/500.html
+
 # If the request matches a real file/dir inside /public, serve it
 RewriteCond %{REQUEST_URI} !^/public/
 RewriteCond %{DOCUMENT_ROOT}/public/$1 -f
@@ -21,4 +24,3 @@ RewriteRule ^(.+)$ /public/$1/ [L]
 # Otherwise, route everything to the front controller in /public
 RewriteCond %{REQUEST_URI} !^/public/
 RewriteRule ^ public/index.php [L]
-

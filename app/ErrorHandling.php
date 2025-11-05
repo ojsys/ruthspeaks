@@ -51,5 +51,8 @@ function setup_error_handlers(): void {
             http_response_code(500);
             echo 'A fatal error occurred.';
         }
+        // Always log request end
+        $dur = class_exists('App\\RequestContext') ? \App\RequestContext::durationMs() : 0;
+        Logger::info('Request end', ['duration_ms'=>$dur, 'status'=>http_response_code()]);
     });
 }
