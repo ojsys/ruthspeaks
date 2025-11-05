@@ -9,3 +9,6 @@ Thumbs.db
 public/uploads/*
 !public/uploads/.htaccess
 
+# Logs
+storage/logs/*
+!storage/logs/.htaccess

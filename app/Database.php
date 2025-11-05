@@ -19,6 +19,7 @@ class Database {
             try {
                 self::$pdo = new PDO($dsn, DB_USER, DB_PASS, $opts);
             } catch (PDOException $e) {
+                if (class_exists('App\\Logger')) { \App\Logger::error('DB connection failed', ['error'=>$e->getMessage()]); }
                 http_response_code(500);
                 echo 'DB connection failed.';
                 exit;
@@ -27,4 +28,3 @@ class Database {
         return self::$pdo;
     }
 }
-

@@ -1,7 +1,7 @@
 -- Seed sample content
 
 INSERT INTO users (email, password_hash, name, role) VALUES
-('ruth@example.com', '$2y$10$1kczvJRTWkH8a0t7BoRP3OaV7p9mKRA5Z9vaH6Jw1OJl5QmNl3i8W', 'Ruth', 'admin');
+('ruth@ruthspeakstruth.com.ng', '$2y$10$1kczvJRTWkH8a0t7BoRP3OaV7p9mKRA5Z9vaH6Jw1OJl5QmNl3i8W', 'Ruth', 'admin');
 
 INSERT INTO categories (name, slug) VALUES
 ('Faith', 'faith'), ('Growth', 'growth'), ('Womanhood', 'womanhood'), ('Family', 'family');
@@ -24,7 +24,7 @@ VALUES (
   ),
   'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=60',
   (SELECT id FROM categories WHERE slug='faith' LIMIT 1),
-  (SELECT id FROM users WHERE email='ruth@example.com' LIMIT 1),
+  (SELECT id FROM users WHERE email='ruth@ruthspeakstruth.com.ng' LIMIT 1),
   5,
   NOW()
 );

@@ -6,6 +6,8 @@ session_start();
 define('BASE_PATH', dirname(__DIR__));
 
 require_once BASE_PATH . '/app/Config.php';
+require_once BASE_PATH . '/app/ErrorHandling.php';
+\App\setup_error_handlers();
 require_once BASE_PATH . '/app/Database.php';
 require_once BASE_PATH . '/app/Helpers.php';
 
