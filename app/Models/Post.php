@@ -49,6 +49,30 @@ class Post {
         return $stmt->fetchAll();
     }
 
+    public static function latest(array $opts = []): array {
+        $limit = isset($opts['limit']) ? (int)$opts['limit'] : 12;
+        $offset = isset($opts['offset']) ? (int)$opts['offset'] : 0;
+        $cat = isset($opts['category_id']) && $opts['category_id'] !== '' ? (int)$opts['category_id'] : null;
+        $q = isset($opts['q']) ? trim((string)$opts['q']) : '';
+        $pdo = Database::pdo();
+        $where = ['(p.published_at IS NOT NULL)'];
+        $params = [];
+        if ($cat) { $where[] = 'p.category_id = :cat'; $params[':cat'] = $cat; }
+        if ($q !== '') {
+            $where[] = '(p.title LIKE :q OR p.excerpt LIKE :q OR p.content LIKE :q)';
+            $params[':q'] = '%' . $q . '%';
+        }
+        $sql = 'SELECT p.* FROM posts p';
+        if ($where) { $sql .= ' WHERE ' . implode(' AND ', $where); }
+        $sql .= ' ORDER BY p.published_at DESC, p.created_at DESC LIMIT :lim OFFSET :off';
+        $stmt = $pdo->prepare($sql);
+        foreach ($params as $k=>$v) { $stmt->bindValue($k, $v); }
+        $stmt->bindValue(':lim', $limit, PDO::PARAM_INT);
+        $stmt->bindValue(':off', $offset, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
+
     public static function create(array $data): int {
         $pdo = Database::pdo();
         $stmt = $pdo->prepare("INSERT INTO posts (slug, title, excerpt, content, cover_image, category_id, author_id, estimated_read_minutes, published_at) VALUES (:slug, :title, :excerpt, :content, :cover, :cat, :author, :erm, :pub)");

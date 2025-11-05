@@ -34,7 +34,6 @@ Routes
 - /post/{slug}         Post detail with reading progress + giveaway
 - /api/track           POST JSON (progress, timeSpentMs)
 - /api/unlock          POST JSON (email, postId, anonId, optional keyword)
-- /rss.xml             RSS feed
 - /sitemap.xml         Sitemap
 - /admin/login         Admin login (stub)
 - /admin               Admin dashboard (stub)

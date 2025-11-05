@@ -25,15 +25,28 @@ use const App\GIVEAWAY_PROGRESS_THRESHOLD;
   <?= App\view('partials/ad_slot', ['placement'=>'head']) ?>
 </head>
 <body>
-  <header class="app-bar">
+  <header class="app-bar" id="appBar">
     <div class="container app-bar-inner">
+      <button class="hamburger" id="navOpen" aria-label="Open menu" aria-controls="navDrawer" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
       <a class="brand" href="/">RuthSpeaksTruth</a>
       <nav class="nav">
         <a href="/">Home</a>
-        <a href="/rss.xml">RSS</a>
+        <a href="/about">About</a>
+        <button class="btn" id="themeToggle" type="button">Toggle theme</button>
       </nav>
     </div>
   </header>
+
+  <aside class="nav-drawer" id="navDrawer" aria-hidden="true">
+    <div class="nav-drawer-inner">
+      <button class="btn" id="navClose" aria-label="Close menu">Close</button>
+      <a href="/">Home</a>
+      <a href="/about">About</a>
+    </div>
+  </aside>
+  <div class="drawer-backdrop" id="drawerBackdrop" hidden></div>
 
   <?= App\view('partials/ad_slot', ['placement'=>'leaderboard']) ?>
 
@@ -49,8 +62,8 @@ use const App\GIVEAWAY_PROGRESS_THRESHOLD;
       </section>
       <section>
         <h4>Explore</h4>
-        <p><a href="/">Home</a></p>
-        <p><a href="/rss.xml">RSS</a> • <a href="/sitemap.xml">Sitemap</a></p>
+        <p><a href="/">Home</a> • <a href="/about">About</a></p>
+        <p><a href="/sitemap.xml">Sitemap</a></p>
       </section>
       <section>
         <h4>Newsletter</h4>
@@ -75,11 +88,12 @@ use const App\GIVEAWAY_PROGRESS_THRESHOLD;
   <script src="/assets/js/main.js" defer></script>
   <script>
     (function(){
-      var form = document.getElementById('subscribe-form'); if (!form) return;
+      // Newsletter
+      var form = document.getElementById('subscribe-form');
       var email = document.getElementById('subscribe-email');
       var btn = document.getElementById('subscribe-btn');
       var out = document.getElementById('subscribe-result');
-      form.addEventListener('submit', function(){
+      if (form) form.addEventListener('submit', function(){
         if (!email.value || !email.value.includes('@')) { out.textContent='Enter a valid email'; return; }
         btn.disabled = true; out.textContent='Subscribing...';
         fetch('/api/subscribe', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ email: email.value })})
@@ -88,6 +102,36 @@ use const App\GIVEAWAY_PROGRESS_THRESHOLD;
             btn.disabled = false;
             if (res.ok) email.value='';
           }).catch(function(){ out.textContent='Network error'; btn.disabled=false; });
+      });
+
+      // Theme & Drawer
+      var body = document.body;
+      var toggle = document.getElementById('themeToggle');
+      var navOpen = document.getElementById('navOpen');
+      var navClose = document.getElementById('navClose');
+      var drawer = document.getElementById('navDrawer');
+      var backdrop = document.getElementById('drawerBackdrop');
+      var appBar = document.getElementById('appBar');
+
+      try {
+        var pref = localStorage.getItem('theme');
+        if (pref === 'dark') body.classList.add('theme-dark');
+        if (toggle) toggle.addEventListener('click', function(){
+          body.classList.toggle('theme-dark');
+          localStorage.setItem('theme', body.classList.contains('theme-dark') ? 'dark' : 'light');
+        });
+      } catch(e){}
+
+      function openDrawer(){ drawer.setAttribute('aria-hidden','false'); backdrop.hidden=false; navOpen && navOpen.setAttribute('aria-expanded','true'); }
+      function closeDrawer(){ drawer.setAttribute('aria-hidden','true'); backdrop.hidden=true; navOpen && navOpen.setAttribute('aria-expanded','false'); }
+      if (navOpen) navOpen.addEventListener('click', openDrawer);
+      if (navClose) navClose.addEventListener('click', closeDrawer);
+      if (backdrop) backdrop.addEventListener('click', closeDrawer);
+
+      var last = 0; var ticking = false;
+      window.addEventListener('scroll', function(){
+        last = window.scrollY || 0;
+        if (!ticking){ requestAnimationFrame(function(){ appBar && (appBar.classList.toggle('scrolled', last>4)); ticking=false; }); ticking=true; }
       });
     })();
   </script>

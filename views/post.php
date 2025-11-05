@@ -7,25 +7,34 @@ $contentHtml = $post['content'] ?? '';
 $contentHtml = injectInArticleAds($contentHtml);
 ?>
 <main>
-  <div class="container">
-    <div class="post-layout">
-      <article class="content">
-        <header>
+  <?php if (!empty($post['cover_image'])): ?>
+    <div class="post-banner" style="background-image:url('<?= e($post['cover_image']) ?>');">
+      <div class="container">
+        <div class="banner-content">
           <h1><?= e($post['title']) ?></h1>
           <div class="card-meta">
             <?= e((int)$post['estimated_read_minutes']) ?> min read
             <?php if (!empty($post['published_at'])): ?>• <?= date('M j, Y', strtotime($post['published_at'])) ?><?php endif; ?>
           </div>
-          <?php if (!empty($post['cover_image'])): ?>
-            <img src="<?= e($post['cover_image']) ?>" alt="<?= e($post['title']) ?>" style="width:100%;border-radius:10px;margin:10px 0;"/>
-          <?php endif; ?>
-        </header>
+        </div>
+      </div>
+    </div>
+  <?php endif; ?>
+  <div class="container">
+    <div class="post-layout">
+      <article class="content">
+        <?php if (empty($post['cover_image'])): ?>
+          <h1><?= e($post['title']) ?></h1>
+          <div class="card-meta">
+            <?= e((int)$post['estimated_read_minutes']) ?> min read
+            <?php if (!empty($post['published_at'])): ?>• <?= date('M j, Y', strtotime($post['published_at'])) ?><?php endif; ?>
+          </div>
+        <?php endif; ?>
         <?= App\view('partials/ad_slot', ['placement'=>'in-article']) ?>
         <section class="prose">
           <?= $contentHtml ?>
         </section>
-        <hr style="margin-top:20px;"/>
-        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+        <div class="share-row">
           <span class="help">Share:</span>
           <?php $shareUrl = (App\SITE_BASE_URL ?: '') . '/post/' . $post['slug']; $enc = urlencode($shareUrl); $text=urlencode($post['title']); ?>
           <a class="btn" href="https://wa.me/?text=<?= $text ?>%20<?= $enc ?>" target="_blank">WhatsApp</a>
