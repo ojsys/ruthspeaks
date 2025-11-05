@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-// EARLY logging setup to catch parse/compile errors
+// Early logging for fatal parse/compile errors
 $__BASE_PATH = dirname(__DIR__);
 $__LOG_DIR = $__BASE_PATH . '/storage/logs';
 if (!is_dir($__LOG_DIR)) { @mkdir($__LOG_DIR, 0775, true); }
