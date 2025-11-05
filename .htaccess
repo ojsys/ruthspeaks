@@ -1,0 +1,24 @@
+RewriteEngine On
+RewriteBase /
+Options -Indexes
+
+# Block sensitive paths and files when repo lives in public_html
+RewriteRule ^(?:app|views|migrations|vendor|storage|config)(?:/|$) - [F,L]
+RewriteRule ^(?:\.git|\.github)(?:/|$) - [F,L]
+RewriteRule ^(?:\.env(?:\..*)?|composer\.(?:json|lock)|package\.json|yarn\.lock|pnpm-lock\.yaml|README\.md|AGENTS\.md)$ - [F,L]
+RewriteRule \.sql$ - [F,L]
+RewriteRule \.sqlite3?$ - [F,L]
+
+# If the request matches a real file/dir inside /public, serve it
+RewriteCond %{REQUEST_URI} !^/public/
+RewriteCond %{DOCUMENT_ROOT}/public/$1 -f
+RewriteRule ^(.+)$ /public/$1 [L]
+
+RewriteCond %{REQUEST_URI} !^/public/
+RewriteCond %{DOCUMENT_ROOT}/public/$1 -d
+RewriteRule ^(.+)$ /public/$1/ [L]
+
+# Otherwise, route everything to the front controller in /public
+RewriteCond %{REQUEST_URI} !^/public/
+RewriteRule ^ public/index.php [L]
+

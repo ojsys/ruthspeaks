@@ -23,9 +23,11 @@ Quick Start (cPanel)
 1) Create a MySQL database and user in cPanel.
 2) Import `migrations/001_schema.sql` (and optionally `002_seed.sql`).
 3) Copy `.env.example` to `.env` and fill in values (DB creds, admin email/hash, site/base URL, ads, thresholds). `.env` is git-ignored.
-4) Upload contents of `public/` into `public_html/`.
-5) Upload `app/`, `views/`, and `migrations/` alongside `public_html/` or into a protected folder.
-   - If you must keep everything under public_html, add a `.htaccess` to deny access to `app/` and `migrations/`.
+4) Option A (recommended): Upload `public/` to `public_html/` and keep `app/`, `views/`, `migrations/`, `.env` one level above web root.
+5) Option B (easy Git): Clone this repo directly into `public_html/`. The root `.htaccess` provided will:
+   - Block access to sensitive folders/files (`app/`, `views/`, `migrations/`, `.env`, etc.)
+   - Rewrite requests to `/public/index.php`
+   - Serve `/public/assets/...` transparently
 
 Routes
 - /                    Home (recent posts)
