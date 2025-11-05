@@ -16,6 +16,15 @@ class Logger {
 
     public static function write(string $level, string $message, array $context = []): void {
         $date = date('Y-m-d H:i:s');
+        // Attach request context
+        if (class_exists('App\\RequestContext')) {
+            $context = array_merge([
+                'req' => RequestContext::id() ?? '',
+                'method' => RequestContext::method() ?? '',
+                'uri' => RequestContext::uri() ?? '',
+                'ip' => RequestContext::ip() ?? ''
+            ], $context);
+        }
         $ctx = '';
         if ($context) {
             $safe = [];
@@ -33,4 +42,3 @@ class Logger {
     public static function warning(string $message, array $context = []): void { self::write('WARNING', $message, $context); }
     public static function info(string $message, array $context = []): void { self::write('INFO', $message, $context); }
 }
-

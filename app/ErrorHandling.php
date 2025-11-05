@@ -9,6 +9,11 @@ require_once __DIR__ . '/Env.php';
 function setup_error_handlers(): void {
     Env::load(defined('BASE_PATH') ? BASE_PATH . '/.env' : null);
     $debug = Env::bool('APP_DEBUG', false);
+    // Route PHP error_log into our storage if possible
+    $phpLog = (defined('BASE_PATH') ? BASE_PATH : __DIR__ . '/..') . '/storage/logs/php-error.log';
+    @ini_set('log_errors', '1');
+    @ini_set('error_log', $phpLog);
+
     if ($debug) {
         ini_set('display_errors', '1');
         ini_set('display_startup_errors', '1');
@@ -48,4 +53,3 @@ function setup_error_handlers(): void {
         }
     });
 }
-

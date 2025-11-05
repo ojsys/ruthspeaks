@@ -11,18 +11,9 @@ require_once BASE_PATH . '/app/ErrorHandling.php';
 \App\setup_error_handlers();
 require_once BASE_PATH . '/app/Database.php';
 require_once BASE_PATH . '/app/Helpers.php';
+require_once BASE_PATH . '/app/Request.php';
 
-// Controllers
-require_once BASE_PATH . '/app/Controllers/HomeController.php';
-require_once BASE_PATH . '/app/Controllers/PostController.php';
-require_once BASE_PATH . '/app/Controllers/ApiController.php';
-require_once BASE_PATH . '/app/Controllers/AdminController.php';
-require_once BASE_PATH . '/app/Controllers/AdminPostsController.php';
-require_once BASE_PATH . '/app/Controllers/AdminTaxonomyController.php';
-require_once BASE_PATH . '/app/Controllers/AdminGiveawaysController.php';
-require_once BASE_PATH . '/app/Controllers/UploadController.php';
-require_once BASE_PATH . '/app/Controllers/NewsletterController.php';
-require_once BASE_PATH . '/app/Controllers/PageController.php';
+// With the autoloader we don't need to require controllers, but it's fine either way.
 
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ?: '/';
 $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
@@ -35,45 +26,31 @@ if ($baseDir && $baseDir !== '/' && strpos($uri, $baseDir) === 0) {
     if ($uri === false) { $uri = '/'; }
 }
 
-// Simple router
-if ($uri === '/' && $method === 'GET') {
-    \App\Controllers\HomeController::index();
-    exit;
-}
+// Initialize request context for logging
+\App\RequestContext::init($method, $uri, $_SERVER['REMOTE_ADDR'] ?? '', $_SERVER['HTTP_USER_AGENT'] ?? '');
+\App\Logger::info('Request start');
 
-if (preg_match('#^/post/([a-z0-9\-]+)$#', $uri, $m) && $method === 'GET') {
-    \App\Controllers\PostController::show($m[1]);
-    exit;
-}
+// Routes
+if ($uri === '/' && $method === 'GET') { \App\Controllers\HomeController::index(); exit; }
+if (preg_match('#^/post/([a-z0-9\-]+)$#', $uri, $m) && $method === 'GET') { \App\Controllers\PostController::show($m[1]); exit; }
 
-if ($uri === '/api/track' && $method === 'POST') {
-    \App\Controllers\ApiController::track();
-    exit;
-}
+// API
+if ($uri === '/api/track' && $method === 'POST') { \App\Controllers\ApiController::track(); exit; }
+if ($uri === '/api/unlock' && $method === 'POST') { \App\Controllers\ApiController::unlock(); exit; }
+if ($uri === '/api/upload' && $method === 'POST') { \App\Controllers\UploadController::upload(); exit; }
+if ($uri === '/api/subscribe' && $method === 'POST') { \App\Controllers\NewsletterController::subscribe(); exit; }
+if ($uri === '/health' && $method === 'GET') { \App\Controllers\HealthController::check(); exit; }
 
-if ($uri === '/api/unlock' && $method === 'POST') {
-    \App\Controllers\ApiController::unlock();
-    exit;
-}
+// Sitemap
+if ($uri === '/sitemap.xml' && $method === 'GET') { \App\Controllers\FeedController::sitemap(); exit; }
 
-if ($uri === '/sitemap.xml' && $method === 'GET') {
-    \App\Controllers\FeedController::sitemap();
-    exit;
-}
+// Static pages
+if ($uri === '/about' && $method === 'GET') { \App\Controllers\PageController::about(); exit; }
 
-// Admin routes (stubs)
-if ($uri === '/admin/login') {
-    \App\Controllers\AdminController::login();
-    exit;
-}
-if ($uri === '/admin/logout') {
-    \App\Controllers\AdminController::logout();
-    exit;
-}
-if ($uri === '/admin') {
-    \App\Controllers\AdminController::dashboard();
-    exit;
-}
+// Admin
+if ($uri === '/admin/login') { \App\Controllers\AdminController::login(); exit; }
+if ($uri === '/admin/logout') { \App\Controllers\AdminController::logout(); exit; }
+if ($uri === '/admin') { \App\Controllers\AdminController::dashboard(); exit; }
 
 // Admin Posts
 if ($uri === '/admin/posts') { \App\Controllers\AdminPostsController::index(); exit; }
@@ -91,14 +68,12 @@ if ($uri === '/admin/giveaways/new') { \App\Controllers\AdminGiveawaysController
 if (preg_match('#^/admin/giveaways/(\d+)/edit$#', $uri, $m)) { \App\Controllers\AdminGiveawaysController::edit((int)$m[1]); exit; }
 if (preg_match('#^/admin/giveaways/(\d+)/delete$#', $uri, $m)) { \App\Controllers\AdminGiveawaysController::delete((int)$m[1]); exit; }
 
-// Upload endpoint
-if ($uri === '/api/upload' && $method === 'POST') { \App\Controllers\UploadController::upload(); exit; }
-
-// Newsletter subscribe
-if ($uri === '/api/subscribe' && $method === 'POST') { \App\Controllers\NewsletterController::subscribe(); exit; }
+// Admin logs
+if ($uri === '/admin/logs') { \App\Controllers\AdminLogsController::show(); exit; }
 
 // 404
 http_response_code(404);
+\App\Logger::warning('Route not found');
 echo \App\view('layout', [
     'title' => 'Not Found',
     'content' => '<div class="container"><h1>404 Not Found</h1><p>The page you requested does not exist.</p></div>'

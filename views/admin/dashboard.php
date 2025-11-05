@@ -8,6 +8,7 @@
         <a class="btn" href="/admin/categories">Categories</a>
         <a class="btn" href="/admin/tags">Tags</a>
         <a class="btn" href="/admin/giveaways">Giveaways</a>
+        <a class="btn" href="/admin/logs">Logs</a>
       </p>
       <p><a href="/">View site</a> • <a href="/admin/logout">Logout</a></p>
     </div>
