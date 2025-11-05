@@ -33,9 +33,11 @@ $contentHtml = injectInArticleAds($contentHtml);
           <a class="btn" href="https://www.facebook.com/sharer/sharer.php?u=<?= $enc ?>" target="_blank">Facebook</a>
         </div>
       </article>
-      <aside>
-        <?= App\view('partials/ad_slot', ['placement'=>'sidebar']) ?>
-      </aside>
+      <?php if (App\ADS_ENABLED && App\AD_SIDEBAR_HTML !== ''): ?>
+        <aside>
+          <?= App\view('partials/ad_slot', ['placement'=>'sidebar']) ?>
+        </aside>
+      <?php endif; ?>
     </div>
   </div>
   

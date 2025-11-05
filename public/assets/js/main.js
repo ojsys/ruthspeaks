@@ -118,5 +118,26 @@
       claimBtn.disabled = false;
     });
   });
-})();
 
+  // Simple ripple for buttons
+  function addRipple(e){
+    var btn = e.currentTarget;
+    var rect = btn.getBoundingClientRect();
+    var ripple = document.createElement('span');
+    var size = Math.max(rect.width, rect.height);
+    ripple.style.position = 'absolute';
+    ripple.style.borderRadius = '50%';
+    ripple.style.background = 'rgba(0,0,0,0.15)';
+    ripple.style.width = ripple.style.height = size + 'px';
+    ripple.style.left = (e.clientX - rect.left - size/2) + 'px';
+    ripple.style.top = (e.clientY - rect.top - size/2) + 'px';
+    ripple.style.transform = 'scale(0)';
+    ripple.style.opacity = '1';
+    ripple.style.pointerEvents = 'none';
+    ripple.style.transition = 'transform 300ms ease, opacity 450ms ease';
+    btn.appendChild(ripple);
+    requestAnimationFrame(function(){ ripple.style.transform = 'scale(1)'; ripple.style.opacity = '0'; });
+    setTimeout(function(){ ripple.remove(); }, 500);
+  }
+  document.querySelectorAll('.btn, .giveaway-cta').forEach(function(b){ b.addEventListener('click', addRipple); });
+})();

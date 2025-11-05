@@ -70,18 +70,21 @@ function estimateMinTimeMs(int $estMinutes): int {
 }
 
 function injectInArticleAds(string $html): string {
-    // Insert a placeholder ad container after the first H2 or after ~5 paragraphs
+    // Only inject if ads enabled and in-article HTML is configured
+    if (!defined(__NAMESPACE__ . '\\ADS_ENABLED') || !ADS_ENABLED) return $html;
+    if (!defined(__NAMESPACE__ . '\\AD_IN_ARTICLE_HTML') || AD_IN_ARTICLE_HTML === '') return $html;
+
     $inserted = false;
     $result = preg_replace_callback('/(<h2[^>]*>.*?<\/h2>)/is', function($m) use (&$inserted){
         if ($inserted) return $m[0];
         $inserted = true;
-        return $m[0] . "\n<div class=\"ad in-article\">In-article Ad</div>\n";
+        return $m[0] . "\n" . AD_IN_ARTICLE_HTML . "\n";
     }, $html, 1);
     if ($result === null) $result = $html;
     if (!$inserted) {
         $parts = preg_split('/(<p[^>]*>.*?<\/p>)/is', $result, -1, PREG_SPLIT_DELIM_CAPTURE);
         if ($parts && count($parts) > 6) {
-            array_splice($parts, 6, 0, ["\n<div class=\"ad in-article\">In-article Ad</div>\n"]);
+            array_splice($parts, 6, 0, ["\n" . AD_IN_ARTICLE_HTML . "\n"]);
             $result = implode('', $parts);
         }
     }

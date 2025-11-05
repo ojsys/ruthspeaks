@@ -24,8 +24,4 @@ $map = [
 
 $html = $map[$placement] ?? '';
 if (!empty($html)) { echo $html; }
-else {
-  $cls = $placement === 'leaderboard' ? 'leaderboard' : ($placement === 'sidebar' ? 'sidebar' : ($placement === 'in-article' ? 'in-article':'ad'));
-  echo '<div class="ad ' . $cls . '">Ad: ' . htmlspecialchars($placement) . '</div>';
-}
-
+// If no HTML configured for this slot, render nothing to keep UI clean.

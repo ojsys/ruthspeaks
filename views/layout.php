@@ -25,12 +25,9 @@ use const App\GIVEAWAY_PROGRESS_THRESHOLD;
   <?= App\view('partials/ad_slot', ['placement'=>'head']) ?>
 </head>
 <body>
-  <header class="site-header">
-    <div class="container">
-      <div>
-        <div class="brand">RuthSpeaksTruth</div>
-        <div class="tagline">Deep, delightful, and real faith.</div>
-      </div>
+  <header class="app-bar">
+    <div class="container app-bar-inner">
+      <a class="brand" href="/">RuthSpeaksTruth</a>
       <nav class="nav">
         <a href="/">Home</a>
         <a href="/rss.xml">RSS</a>
@@ -38,21 +35,36 @@ use const App\GIVEAWAY_PROGRESS_THRESHOLD;
     </div>
   </header>
 
+  <?= App\view('partials/ad_slot', ['placement'=>'leaderboard']) ?>
+
   <div class="progress-wrap"><div class="progress-bar"></div></div>
 
   <?= $content ?? '' ?>
 
   <footer class="site-footer">
-    <div class="container">
-      <?= App\view('partials/ad_slot', ['placement'=>'leaderboard']) ?>
-      <p>&copy; <?= date('Y') ?> RuthSpeaksTruth. Built with love.</p>
-      <p><a href="/sitemap.xml">Sitemap</a></p>
-      <div id="newsletter" style="margin-top:10px;">
-        <form id="subscribe-form" onsubmit="return false;" style="display:flex;gap:8px;max-width:520px;">
-          <input class="input" type="email" id="subscribe-email" placeholder="Get updates — your@email.com" required />
+    <div class="container footer-grid">
+      <section>
+        <h4>About</h4>
+        <p>I’m Ruth Goodness Onah. Here I pour out thoughts on faith, growth, womanhood, family — and those “God, are You seeing this?” moments.</p>
+      </section>
+      <section>
+        <h4>Explore</h4>
+        <p><a href="/">Home</a></p>
+        <p><a href="/rss.xml">RSS</a> • <a href="/sitemap.xml">Sitemap</a></p>
+      </section>
+      <section>
+        <h4>Newsletter</h4>
+        <form id="subscribe-form" onsubmit="return false;" class="subscribe-form">
+          <input class="input" type="email" id="subscribe-email" placeholder="Your email" required />
           <button class="btn primary" id="subscribe-btn" type="submit">Subscribe</button>
         </form>
         <div id="subscribe-result" class="help"></div>
+      </section>
+    </div>
+    <div class="footer-bottom">
+      <div class="container">
+        <div class="left">&copy; <?= date('Y') ?> RuthSpeaksTruth</div>
+        <div class="right">Made with grace and laughter.</div>
       </div>
     </div>
   </footer>
