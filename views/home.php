@@ -1,24 +1,29 @@
 <?php use function App\e; ?>
 <main>
-  <div class="container">
-    <section class="hero">
-      <div class="hero-content-wrapper">
-        <div class="hero-text">
-          <h1>RuthSpeaksTruth</h1>
-          <p>Deep, delightful, and real faith. Honest posts on faith, growth, womanhood, and family — with grace that still works overtime.</p>
-          <form method="get" action="/" class="hero-search">
-            <input class="input" type="search" name="q" value="<?= e($q ?? '') ?>" placeholder="Search posts..." />
-            <button type="submit" class="btn primary">Search</button>
-          </form>
-          <?php if (!empty($q)): ?>
-            <div class="help" style="margin-top:16px;">Search results for "<?= e($q) ?>"</div>
-          <?php endif; ?>
-        </div>
-        <div class="hero-image">
-          <img src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=800&q=80" alt="RuthSpeaksTruth" />
-        </div>
+  <section class="hero">
+    <div class="hero-bg-overlay"></div>
+    <div class="container hero-container">
+      <div class="hero-content">
+        <div class="hero-badge">Welcome to</div>
+        <h1 class="hero-title">RuthSpeaksTruth</h1>
+        <p class="hero-subtitle">Deep, delightful, and real faith. Honest posts on faith, growth, womanhood, and family — with grace that still works overtime.</p>
+        <form method="get" action="/" class="hero-search">
+          <div class="search-wrapper">
+            <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+            </svg>
+            <input class="input search-input" type="search" name="q" value="<?= e($q ?? '') ?>" placeholder="Search articles, topics, inspiration..." />
+            <button type="submit" class="btn primary search-btn">Search</button>
+          </div>
+        </form>
+        <?php if (!empty($q)): ?>
+          <div class="search-result-notice">Showing results for "<?= e($q) ?>"</div>
+        <?php endif; ?>
       </div>
-    </section>
+    </div>
+  </section>
+
+  <div class="container">
 
     <?php if (!empty($posts) && !isset($q) && !isset($selectedCat)): ?>
       <section class="featured-section">
