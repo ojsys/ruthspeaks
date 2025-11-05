@@ -34,6 +34,7 @@ use const App\GIVEAWAY_PROGRESS_THRESHOLD;
       <nav class="nav">
         <a href="/">Home</a>
         <a href="/about">About</a>
+        <a href="/contact">Let's Talk</a>
         <button class="btn" id="themeToggle" type="button">Toggle theme</button>
       </nav>
     </div>
@@ -44,6 +45,7 @@ use const App\GIVEAWAY_PROGRESS_THRESHOLD;
       <button class="btn" id="navClose" aria-label="Close menu">Close</button>
       <a href="/">Home</a>
       <a href="/about">About</a>
+      <a href="/contact">Let's Talk</a>
     </div>
   </aside>
   <div class="drawer-backdrop" id="drawerBackdrop" hidden></div>

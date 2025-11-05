@@ -2,18 +2,22 @@
 <main>
   <div class="container">
     <section class="hero">
-      <div style="display: flex; justify-content: space-between; align-items: start; gap: 24px; flex-wrap: wrap;">
-        <div style="flex: 1; min-width: 280px;">
+      <div class="hero-content-wrapper">
+        <div class="hero-text">
           <h1>RuthSpeaksTruth</h1>
           <p>Deep, delightful, and real faith. Honest posts on faith, growth, womanhood, and family — with grace that still works overtime.</p>
+          <form method="get" action="/" class="hero-search">
+            <input class="input" type="search" name="q" value="<?= e($q ?? '') ?>" placeholder="Search posts..." />
+            <button type="submit" class="btn primary">Search</button>
+          </form>
+          <?php if (!empty($q)): ?>
+            <div class="help" style="margin-top:16px;">Search results for "<?= e($q) ?>"</div>
+          <?php endif; ?>
         </div>
-        <form method="get" action="/" style="max-width:320px; width:100%; min-width:260px;">
-          <input class="input" type="search" name="q" value="<?= e($q ?? '') ?>" placeholder="Search posts..." />
-        </form>
+        <div class="hero-image">
+          <img src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=800&q=80" alt="RuthSpeaksTruth" />
+        </div>
       </div>
-      <?php if (!empty($q)): ?>
-        <div class="help" style="margin-top:16px;">Search results for "<?= e($q) ?>"</div>
-      <?php endif; ?>
     </section>
 
     <?php if (!empty($posts) && !isset($q) && !isset($selectedCat)): ?>

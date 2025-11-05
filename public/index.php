@@ -60,6 +60,8 @@ if ($uri === '/sitemap.xml' && $method === 'GET') { \App\Controllers\FeedControl
 
 // Static pages
 if ($uri === '/about' && $method === 'GET') { \App\Controllers\PageController::about(); exit; }
+if ($uri === '/contact' && $method === 'GET') { \App\Controllers\ContactController::show(); exit; }
+if ($uri === '/contact/submit' && $method === 'POST') { \App\Controllers\ContactController::submit(); exit; }
 
 // Admin
 if ($uri === '/admin/login') { \App\Controllers\AdminController::login(); exit; }
