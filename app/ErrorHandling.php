@@ -10,7 +10,7 @@ function setup_error_handlers(): void {
     Env::load(defined('BASE_PATH') ? BASE_PATH . '/.env' : null);
     $debug = Env::bool('APP_DEBUG', false);
     // Route PHP error_log into our storage if possible
-    $phpLog = (defined('BASE_PATH') ? BASE_PATH : __DIR__ . '/..') . '/storage/logs/php-error.log';
+    $phpLog = (defined('BASE_PATH') ? BASE_PATH : __DIR__ . '/..') . '/storage/logs/errors.log';
     @ini_set('log_errors', '1');
     @ini_set('error_log', $phpLog);
 

@@ -13,6 +13,9 @@ class Logger {
     private static function logFile(): string {
         return self::logDir() . '/app.log';
     }
+    private static function errFile(): string {
+        return self::logDir() . '/errors.log';
+    }
 
     public static function write(string $level, string $message, array $context = []): void {
         $date = date('Y-m-d H:i:s');
@@ -34,8 +37,12 @@ class Logger {
             $ctx = ' ' . json_encode($safe);
         }
         $line = "[$date] $level: $message$ctx\n";
-        @error_log($line); // PHP error log
+        @error_log($line); // PHP error log (also goes to our configured file)
         @file_put_contents(self::logFile(), $line, FILE_APPEND | LOCK_EX);
+        // Duplicate warnings and errors into errors.log
+        if ($level === 'ERROR' || $level === 'WARNING') {
+            @file_put_contents(self::errFile(), $line, FILE_APPEND | LOCK_EX);
+        }
     }
 
     public static function error(string $message, array $context = []): void { self::write('ERROR', $message, $context); }

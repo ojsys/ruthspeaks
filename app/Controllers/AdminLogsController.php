@@ -11,14 +11,12 @@ class AdminLogsController {
     public static function show(): void {
         self::guard();
         $appLog = BASE_PATH . '/storage/logs/app.log';
-        $phpLogInternal = BASE_PATH . '/storage/logs/php-error.log';
-        $phpLogCpanel = BASE_PATH . '/public/error_log'; // typical cPanel location
+        $errLog = BASE_PATH . '/storage/logs/errors.log';
         $app = self::tail($appLog, 200);
-        $phpInt = self::tail($phpLogInternal, 200);
-        $phpCpanel = self::tail($phpLogCpanel, 200);
+        $errs = self::tail($errLog, 200);
         echo view('layout', [
             'title' => 'Logs',
-            'content' => view('admin/logs', ['app'=>$app, 'phpInt'=>$phpInt, 'phpCpanel'=>$phpCpanel])
+            'content' => view('admin/logs', ['app'=>$app, 'errs'=>$errs])
         ]);
     }
 
