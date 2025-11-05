@@ -62,7 +62,7 @@ class Post {
             $where[] = '(p.title LIKE :q OR p.excerpt LIKE :q OR p.content LIKE :q)';
             $params[':q'] = '%' . $q . '%';
         }
-        $sql = 'SELECT p.* FROM posts p';
+        $sql = 'SELECT p.*, c.name as category_name FROM posts p LEFT JOIN categories c ON p.category_id = c.id';
         if ($where) { $sql .= ' WHERE ' . implode(' AND ', $where); }
         $sql .= ' ORDER BY p.published_at DESC, p.created_at DESC LIMIT :lim OFFSET :off';
         $stmt = $pdo->prepare($sql);
