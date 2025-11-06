@@ -65,6 +65,14 @@ $currentPath = $_SERVER['REQUEST_URI'] ?? '';
         <span>Tags</span>
       </a>
 
+      <a href="/admin/pages" class="admin-nav-item <?= strpos($currentPath, '/admin/pages') === 0 ? 'active' : '' ?>">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/>
+          <polyline points="13 2 13 9 20 9"/>
+        </svg>
+        <span>Pages</span>
+      </a>
+
       <a href="/admin/giveaways" class="admin-nav-item <?= strpos($currentPath, '/admin/giveaways') === 0 ? 'active' : '' ?>">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <polyline points="20 12 20 22 4 22 4 12"/>
@@ -74,6 +82,14 @@ $currentPath = $_SERVER['REQUEST_URI'] ?? '';
           <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
         </svg>
         <span>Giveaways</span>
+      </a>
+
+      <a href="/admin/settings" class="admin-nav-item <?= $currentPath === '/admin/settings' ? 'active' : '' ?>">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M12 1v6m0 6v6m6.364-15.364l-4.243 4.243m-4.243 4.243l-4.242 4.242m12.728 0l-4.243-4.242m-4.243-4.243L1.636 6.636"/>
+        </svg>
+        <span>Settings</span>
       </a>
 
       <a href="/admin/logs" class="admin-nav-item <?= $currentPath === '/admin/logs' ? 'active' : '' ?>">

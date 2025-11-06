@@ -84,8 +84,20 @@ if ($uri === '/admin/giveaways/new') { \App\Controllers\AdminGiveawaysController
 if (preg_match('#^/admin/giveaways/(\d+)/edit$#', $uri, $m)) { \App\Controllers\AdminGiveawaysController::edit((int)$m[1]); exit; }
 if (preg_match('#^/admin/giveaways/(\d+)/delete$#', $uri, $m)) { \App\Controllers\AdminGiveawaysController::delete((int)$m[1]); exit; }
 
+// Admin Pages
+if ($uri === '/admin/pages') { \App\Controllers\AdminPagesController::index(); exit; }
+if ($uri === '/admin/pages/new') { \App\Controllers\AdminPagesController::create(); exit; }
+if (preg_match('#^/admin/pages/(\d+)/edit$#', $uri, $m)) { \App\Controllers\AdminPagesController::edit((int)$m[1]); exit; }
+if (preg_match('#^/admin/pages/(\d+)/delete$#', $uri, $m)) { \App\Controllers\AdminPagesController::delete((int)$m[1]); exit; }
+
+// Admin Settings
+if ($uri === '/admin/settings') { \App\Controllers\AdminSettingsController::index(); exit; }
+
 // Admin logs
 if ($uri === '/admin/logs') { \App\Controllers\AdminLogsController::show(); exit; }
+
+// Public Pages
+if (preg_match('#^/page/([a-z0-9\-]+)$#', $uri, $m) && $method === 'GET') { \App\Controllers\PageController::show($m[1]); exit; }
 
 // 404
 http_response_code(404);

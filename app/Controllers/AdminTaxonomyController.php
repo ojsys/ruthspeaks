@@ -3,12 +3,20 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
-use App\Models\Category; use App\Models\Tag;
-use function Appiew;
-use function App\admin_view; use function App\slugify; use function App\verify_csrf;
+use App\Models\Category;
+use App\Models\Tag;
+use function App\view;
+use function App\admin_view;
+use function App\slugify;
+use function App\verify_csrf;
 
 class AdminTaxonomyController {
-    private static function guard(): void { if (!isset($_SESSION['admin'])) { header('Location: /admin/login'); exit; } }
+    private static function guard(): void {
+        if (!isset($_SESSION['admin'])) {
+            header('Location: /admin/login');
+            exit;
+        }
+    }
 
     public static function categories(): void {
         self::guard();
@@ -24,9 +32,14 @@ class AdminTaxonomyController {
             } elseif (isset($_POST['delete'])) {
                 Category::delete((int)$_POST['id']);
             }
-            header('Location: /admin/categories'); exit;
+            header('Location: /admin/categories');
+            exit;
         }
-        echo admin_view('categories', array_merge(['title' => 'Categories'], ['items'=>Category::all(), 'type'=>'category']));
+        echo admin_view('categories', [
+            'title' => 'Categories',
+            'items' => Category::all(),
+            'type' => 'category'
+        ]);
     }
 
     public static function tags(): void {
@@ -43,9 +56,13 @@ class AdminTaxonomyController {
             } elseif (isset($_POST['delete'])) {
                 Tag::delete((int)$_POST['id']);
             }
-            header('Location: /admin/tags'); exit;
+            header('Location: /admin/tags');
+            exit;
         }
-        echo admin_view('categories', array_merge(['title' => 'Tags'], ['items'=>Tag::all(), 'type'=>'tag']));
+        echo admin_view('categories', [
+            'title' => 'Tags',
+            'items' => Tag::all(),
+            'type' => 'tag'
+        ]);
     }
 }
-
