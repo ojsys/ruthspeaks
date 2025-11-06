@@ -5,6 +5,10 @@ namespace App;
 
 function e(?string $s): string { return htmlspecialchars($s ?? '', ENT_QUOTES, 'UTF-8'); }
 
+function db(): \PDO {
+    return Database::pdo();
+}
+
 function slugify(string $text): string {
     $text = strtolower(trim($text));
     $text = preg_replace('~[^a-z0-9]+~', '-', $text) ?: '';
