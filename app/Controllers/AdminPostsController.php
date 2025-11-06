@@ -7,6 +7,7 @@ use App\Models\Post;
 use App\Models\Category;
 use App\Models\Tag;
 use function App\view;
+use function App\admin_view;
 use function App\e;
 use function App\slugify;
 use function App\csrf_field;
@@ -21,9 +22,9 @@ class AdminPostsController {
     public static function index(): void {
         self::guard();
         $posts = Post::all(200);
-        echo view('layout', [
+        echo admin_view('posts_list', [
             'title' => 'Posts',
-            'content' => view('admin/posts_list', ['posts'=>$posts])
+            'posts' => $posts
         ]);
     }
 
@@ -50,9 +51,10 @@ class AdminPostsController {
             header('Location: /admin/posts'); exit;
         }
         $cats = Category::all();
-        echo view('layout', [
+        echo admin_view('posts_form', [
             'title' => 'New Post',
-            'content' => view('admin/posts_form', ['post'=>null,'categories'=>$cats])
+            'post' => null,
+            'categories' => $cats
         ]);
     }
 
@@ -82,9 +84,11 @@ class AdminPostsController {
         $cats = Category::all();
         // Preload tag string for UI
         $tagStr = implode(', ', Post::tagsFor($id));
-        echo view('layout', [
+        echo admin_view('posts_form', [
             'title' => 'Edit Post',
-            'content' => view('admin/posts_form', ['post'=>$post,'categories'=>$cats,'tags'=>$tagStr])
+            'post' => $post,
+            'categories' => $cats,
+            'tags' => $tagStr
         ]);
     }
 
@@ -96,13 +100,11 @@ class AdminPostsController {
             header('Location: /admin/posts'); exit;
         }
         $post = Post::findById($id);
-        echo view('layout', [
+        echo admin_view('confirm_delete', [
             'title' => 'Delete Post',
-            'content' => view('admin/confirm_delete', [
-                'resource' => 'post',
-                'name' => $post['title'] ?? ('#'.$id),
-                'action' => '/admin/posts/'.$id.'/delete'
-            ])
+            'resource' => 'post',
+            'name' => $post['title'] ?? ('#'.$id),
+            'action' => '/admin/posts/'.$id.'/delete'
         ]);
     }
 }

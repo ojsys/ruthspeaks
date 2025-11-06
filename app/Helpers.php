@@ -29,6 +29,12 @@ function render(string $template, array $params = []): void {
     echo view($template, $params);
 }
 
+function admin_view(string $template, array $params = []): string {
+    // Render an admin view with the admin layout
+    $content = view('admin/' . $template, $params);
+    return view('admin_layout', array_merge($params, ['content' => $content]));
+}
+
 function notFound(): void {
     http_response_code(404);
     echo view('layout', [

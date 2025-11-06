@@ -4,7 +4,8 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\Models\Category; use App\Models\Tag;
-use function App\view; use function App\slugify; use function App\verify_csrf;
+use function Appiew;
+use function App\admin_view; use function App\slugify; use function App\verify_csrf;
 
 class AdminTaxonomyController {
     private static function guard(): void { if (!isset($_SESSION['admin'])) { header('Location: /admin/login'); exit; } }
@@ -25,10 +26,7 @@ class AdminTaxonomyController {
             }
             header('Location: /admin/categories'); exit;
         }
-        echo view('layout', [
-            'title'=>'Categories',
-            'content'=> view('admin/categories', ['items'=>Category::all(), 'type'=>'category'])
-        ]);
+        echo admin_view('categories', array_merge(['title' => 'Categories'], ['items'=>Category::all(), 'type'=>'category']));
     }
 
     public static function tags(): void {
@@ -47,10 +45,7 @@ class AdminTaxonomyController {
             }
             header('Location: /admin/tags'); exit;
         }
-        echo view('layout', [
-            'title'=>'Tags',
-            'content'=> view('admin/categories', ['items'=>Tag::all(), 'type'=>'tag'])
-        ]);
+        echo admin_view('categories', array_merge(['title' => 'Tags'], ['items'=>Tag::all(), 'type'=>'tag']));
     }
 }
 

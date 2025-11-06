@@ -3,7 +3,8 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
-use function App\view;
+use function Appiew;
+use function App\admin_view;
 
 class AdminLogsController {
     private static function guard(): void { if (!isset($_SESSION['admin'])) { header('Location: /admin/login'); exit; } }
@@ -14,10 +15,7 @@ class AdminLogsController {
         $errLog = BASE_PATH . '/storage/logs/errors.log';
         $app = self::tail($appLog, 200);
         $errs = self::tail($errLog, 200);
-        echo view('layout', [
-            'title' => 'Logs',
-            'content' => view('admin/logs', ['app'=>$app, 'errs'=>$errs])
-        ]);
+        echo admin_view('logs', array_merge(['title' => 'Logs'], ['app'=>$app, 'errs'=>$errs]));
     }
 
     private static function tail(string $file, int $lines): string {

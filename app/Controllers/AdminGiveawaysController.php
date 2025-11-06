@@ -4,7 +4,8 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\Models\Giveaway; use App\Models\Post; use App\Database;
-use function App\view; use function App\verify_csrf;
+use function Appiew;
+use function App\admin_view; use function App\verify_csrf;
 
 class AdminGiveawaysController {
     private static function guard(): void { if (!isset($_SESSION['admin'])) { header('Location: /admin/login'); exit; } }
@@ -13,7 +14,7 @@ class AdminGiveawaysController {
         self::guard();
         $pdo = Database::pdo();
         $rows = $pdo->query("SELECT g.*, p.title as post_title FROM giveaways g JOIN posts p ON p.id=g.post_id ORDER BY g.created_at DESC")->fetchAll();
-        echo view('layout', [ 'title'=>'Giveaways', 'content'=>view('admin/giveaways_list', ['items'=>$rows]) ]);
+        echo admin_view('giveaways_list', array_merge(['title' => 'Giveaways'], ['items'=>$rows]));
     }
 
     public static function create(): void {
@@ -31,7 +32,7 @@ class AdminGiveawaysController {
             ]);
             header('Location: /admin/giveaways'); exit;
         }
-        echo view('layout', [ 'title'=>'New Giveaway', 'content'=>view('admin/giveaways_form', ['giveaway'=>null, 'posts'=>Post::all(500)]) ]);
+        echo admin_view('giveaways_form', array_merge(['title' => 'New Giveaway'], ['giveaway'=>null, 'posts'=>Post::all(500)]));
     }
 
     public static function edit(int $id): void {
@@ -51,7 +52,7 @@ class AdminGiveawaysController {
             ]);
             header('Location: /admin/giveaways'); exit;
         }
-        echo view('layout', [ 'title'=>'Edit Giveaway', 'content'=>view('admin/giveaways_form', ['giveaway'=>$g, 'posts'=>Post::all(500)]) ]);
+        echo admin_view('giveaways_form', array_merge(['title' => 'Edit Giveaway'], ['giveaway'=>$g, 'posts'=>Post::all(500)]));
     }
 
     public static function delete(int $id): void {
@@ -63,14 +64,11 @@ class AdminGiveawaysController {
             $stmt->execute([':id'=>$id]);
             header('Location: /admin/giveaways'); exit;
         }
-        echo view('layout', [
-            'title' => 'Delete Giveaway',
-            'content' => view('admin/confirm_delete', [
+        echo admin_view('confirm_delete', array_merge(['title' => 'Delete Giveaway'], [
                 'resource' => 'giveaway',
                 'name' => '#'.$id,
                 'action' => '/admin/giveaways/'.$id.'/delete'
-            ])
-        ]);
+            ]));
     }
 }
 
