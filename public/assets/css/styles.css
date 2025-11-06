@@ -1034,7 +1034,7 @@ body {
 /* Theme Toggle Floating Button */
 .theme-toggle-floating {
   position: fixed;
-  bottom: 24px;
+  top: 24px;
   right: 24px;
   width: 56px;
   height: 56px;
@@ -1047,7 +1047,7 @@ body {
   align-items: center;
   justify-content: center;
   transition: all 0.3s ease;
-  z-index: 100;
+  z-index: 1000;
   color: white;
 }
 
@@ -1094,7 +1094,7 @@ body {
   .theme-toggle-floating {
     width: 48px;
     height: 48px;
-    bottom: 20px;
+    top: 20px;
     right: 20px;
   }
 }
