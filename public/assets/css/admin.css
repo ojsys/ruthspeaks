@@ -696,3 +696,131 @@
     flex-direction: column;
   }
 }
+
+/* User Management Styles */
+.admin-user-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.admin-user-cell-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--admin-border);
+}
+
+.admin-user-cell-initials {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: white;
+  border: 2px solid var(--admin-border);
+}
+
+.admin-user-cell-name {
+  font-weight: 600;
+  color: var(--admin-text);
+}
+
+.admin-user-cell-meta {
+  font-size: 13px;
+  color: var(--admin-text-secondary);
+}
+
+.admin-code {
+  background: var(--admin-bg);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  color: var(--admin-primary);
+  border: 1px solid var(--admin-border);
+}
+
+.admin-user-avatar-section {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background: var(--admin-bg);
+  border-radius: 8px;
+  margin-bottom: 24px;
+}
+
+.admin-user-avatar-preview {
+  flex-shrink: 0;
+}
+
+.admin-user-avatar-preview img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--admin-border);
+}
+
+.admin-user-avatar-placeholder {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 700;
+  color: white;
+  border: 3px solid var(--admin-border);
+}
+
+.admin-info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.admin-info-item label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--admin-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.admin-info-item span {
+  font-size: 15px;
+  color: var(--admin-text);
+  font-weight: 500;
+}
+
+.admin-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-weight: 500;
+  color: var(--admin-text);
+}
+
+.admin-checkbox-label input[type="checkbox"] {
+  cursor: pointer;
+  width: 18px;
+  height: 18px;
+  accent-color: var(--admin-primary);
+}
+
+@media (max-width: 768px) {
+  .admin-user-avatar-section {
+    flex-direction: column;
+    text-align: center;
+  }
+}

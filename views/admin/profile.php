@@ -3,61 +3,74 @@ use function App\e;
 use function App\csrf_field;
 ?>
 
-<div class="page-header">
-  <h1>My Profile</h1>
-  <p>Manage your account information</p>
+<div class="admin-page-header">
+  <div>
+    <h1 class="admin-page-title">My Profile</h1>
+    <p class="admin-page-subtitle">Manage your account information</p>
+  </div>
 </div>
 
 <?php if (!empty($success)): ?>
-  <div class="alert alert-success">
-    <?= e($success) ?>
+  <div class="admin-alert admin-alert-success">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+      <polyline points="22 4 12 14.01 9 11.01"/>
+    </svg>
+    <div><strong>Success!</strong> <?= e($success) ?></div>
   </div>
 <?php endif; ?>
 
 <?php if (!empty($errors)): ?>
-  <div class="alert alert-error">
-    <strong>Please fix the following errors:</strong>
-    <ul>
-      <?php foreach ($errors as $error): ?>
-        <li><?= e($error) ?></li>
-      <?php endforeach; ?>
-    </ul>
+  <div class="admin-alert admin-alert-danger">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="10"/>
+      <line x1="15" y1="9" x2="9" y2="15"/>
+      <line x1="9" y1="9" x2="15" y2="15"/>
+    </svg>
+    <div>
+      <strong>Please fix the following errors:</strong>
+      <ul style="margin: 8px 0 0 0; padding-left: 20px;">
+        <?php foreach ($errors as $error): ?>
+          <li><?= e($error) ?></li>
+        <?php endforeach; ?>
+      </ul>
+    </div>
   </div>
 <?php endif; ?>
 
-<div class="profile-grid">
+<div style="display: grid; gap: 24px; max-width: 900px;">
   <!-- Profile Information -->
-  <div class="card">
-    <div class="card-header">
-      <h2>Profile Information</h2>
+  <div class="admin-card">
+    <div class="admin-card-header">
+      <h3 class="admin-card-title">Profile Information</h3>
     </div>
-    <div class="card-body">
+    <div class="admin-card-body">
       <form method="POST" action="/admin/profile" enctype="multipart/form-data">
         <?= csrf_field() ?>
 
-        <div class="profile-avatar-section">
-          <div class="avatar-preview">
+        <div class="admin-user-avatar-section">
+          <div class="admin-user-avatar-preview">
             <?php if (!empty($user['avatar'])): ?>
               <img src="<?= e($user['avatar']) ?>" alt="<?= e($user['name']) ?>" id="avatarPreview" />
             <?php else: ?>
-              <div class="avatar-placeholder" id="avatarPreview">
+              <div class="admin-user-avatar-placeholder" id="avatarPreview">
                 <?= strtoupper(substr($user['name'], 0, 2)) ?>
               </div>
             <?php endif; ?>
           </div>
-          <div class="avatar-upload">
-            <label for="avatar" class="btn btn-secondary btn-sm">Change Avatar</label>
+          <div>
+            <label for="avatar" class="admin-btn">Change Avatar</label>
             <input type="file" id="avatar" name="avatar" accept="image/*" style="display: none;" />
-            <small class="help-text">JPG, PNG or GIF. Max 2MB.</small>
+            <p class="admin-form-help" style="margin-top: 8px;">JPG, PNG or GIF. Max 2MB.</p>
           </div>
         </div>
 
-        <div class="form-row">
-          <div class="form-group">
-            <label for="name">Full Name <span class="required">*</span></label>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div class="admin-form-group">
+            <label class="admin-form-label required" for="name">Full Name</label>
             <input
               type="text"
-              class="input"
+              class="admin-input"
               id="name"
               name="name"
               value="<?= e($old['name'] ?? $user['name']) ?>"
@@ -65,11 +78,11 @@ use function App\csrf_field;
             />
           </div>
 
-          <div class="form-group">
-            <label for="username">Username <span class="required">*</span></label>
+          <div class="admin-form-group">
+            <label class="admin-form-label required" for="username">Username</label>
             <input
               type="text"
-              class="input"
+              class="admin-input"
               id="username"
               name="username"
               value="<?= e($old['username'] ?? $user['username']) ?>"
@@ -79,11 +92,11 @@ use function App\csrf_field;
           </div>
         </div>
 
-        <div class="form-group">
-          <label for="email">Email <span class="required">*</span></label>
+        <div class="admin-form-group">
+          <label class="admin-form-label required" for="email">Email</label>
           <input
             type="email"
-            class="input"
+            class="admin-input"
             id="email"
             name="email"
             value="<?= e($old['email'] ?? $user['email']) ?>"
@@ -91,10 +104,10 @@ use function App\csrf_field;
           />
         </div>
 
-        <div class="form-group">
-          <label for="bio">Bio</label>
+        <div class="admin-form-group" style="margin-bottom: 0;">
+          <label class="admin-form-label" for="bio">Bio</label>
           <textarea
-            class="input"
+            class="admin-textarea"
             id="bio"
             name="bio"
             rows="4"
@@ -102,19 +115,19 @@ use function App\csrf_field;
           ><?= e($old['bio'] ?? $user['bio'] ?? '') ?></textarea>
         </div>
 
-        <div class="form-actions">
-          <button type="submit" class="btn btn-primary">Update Profile</button>
+        <div class="admin-form-actions" style="margin-top: 24px;">
+          <button type="submit" class="admin-btn admin-btn-primary">Update Profile</button>
         </div>
       </form>
     </div>
   </div>
 
   <!-- Password Change -->
-  <div class="card">
-    <div class="card-header">
-      <h2>Change Password</h2>
+  <div class="admin-card">
+    <div class="admin-card-header">
+      <h3 class="admin-card-title">Change Password</h3>
     </div>
-    <div class="card-body">
+    <div class="admin-card-body">
       <form method="POST" action="/admin/profile">
         <?= csrf_field() ?>
 
@@ -124,72 +137,72 @@ use function App\csrf_field;
         <input type="hidden" name="username" value="<?= e($user['username']) ?>" />
         <input type="hidden" name="bio" value="<?= e($user['bio'] ?? '') ?>" />
 
-        <div class="form-group">
-          <label for="current_password">Current Password</label>
+        <div class="admin-form-group">
+          <label class="admin-form-label" for="current_password">Current Password</label>
           <input
             type="password"
-            class="input"
+            class="admin-input"
             id="current_password"
             name="current_password"
             placeholder="Enter your current password"
           />
         </div>
 
-        <div class="form-group">
-          <label for="new_password">New Password</label>
+        <div class="admin-form-group">
+          <label class="admin-form-label" for="new_password">New Password</label>
           <input
             type="password"
-            class="input"
+            class="admin-input"
             id="new_password"
             name="new_password"
             placeholder="Enter new password"
             minlength="6"
           />
-          <small class="help-text">At least 6 characters</small>
+          <p class="admin-form-help">At least 6 characters</p>
         </div>
 
-        <div class="form-group">
-          <label for="new_password_confirm">Confirm New Password</label>
+        <div class="admin-form-group" style="margin-bottom: 0;">
+          <label class="admin-form-label" for="new_password_confirm">Confirm New Password</label>
           <input
             type="password"
-            class="input"
+            class="admin-input"
             id="new_password_confirm"
             name="new_password_confirm"
             placeholder="Confirm new password"
           />
         </div>
 
-        <div class="form-actions">
-          <button type="submit" class="btn btn-primary">Update Password</button>
+        <div class="admin-form-actions" style="margin-top: 24px;">
+          <button type="submit" class="admin-btn admin-btn-primary">Update Password</button>
         </div>
       </form>
     </div>
   </div>
 
   <!-- Account Information -->
-  <div class="card">
-    <div class="card-header">
-      <h2>Account Information</h2>
+  <div class="admin-card">
+    <div class="admin-card-header">
+      <h3 class="admin-card-title">Account Information</h3>
     </div>
-    <div class="card-body">
-      <div class="info-grid">
-        <div class="info-item">
+    <div class="admin-card-body">
+      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px;">
+        <div class="admin-info-item">
           <label>Role</label>
-          <span class="badge badge-<?= $user['role'] === 'admin' ? 'primary' : 'secondary' ?>">
+          <span class="admin-badge admin-badge-<?= $user['role'] === 'admin' ? 'primary' : 'secondary' ?>">
             <?= e(ucfirst($user['role'])) ?>
           </span>
         </div>
-        <div class="info-item">
+        <div class="admin-info-item">
           <label>Account Status</label>
-          <span class="badge badge-<?= $user['is_active'] ? 'success' : 'danger' ?>">
+          <span class="admin-badge admin-badge-<?= $user['is_active'] ? 'success' : 'danger' ?>">
             <?= $user['is_active'] ? 'Active' : 'Inactive' ?>
           </span>
         </div>
-        <div class="info-item">
+        <div class="admin-info-item">
           <label>Member Since</label>
           <span><?= date('F j, Y', strtotime($user['created_at'])) ?></span>
         </div>
-        <div class="info-item">
+        <div class="admin-info-item">
           <label>Last Login</label>
           <span><?= $user['last_login_at'] ? date('F j, Y g:i A', strtotime($user['last_login_at'])) : 'Never' ?></span>
         </div>
@@ -197,167 +210,6 @@ use function App\csrf_field;
     </div>
   </div>
 </div>
-
-<style>
-.profile-grid {
-  display: grid;
-  gap: 1.5rem;
-  max-width: 900px;
-}
-
-.profile-avatar-section {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  padding: 1.5rem;
-  background: #f8fafc;
-  border-radius: 8px;
-  margin-bottom: 1.5rem;
-}
-
-body.theme-dark .profile-avatar-section {
-  background: #0f172a;
-}
-
-.avatar-preview {
-  flex-shrink: 0;
-}
-
-.avatar-preview img,
-.avatar-placeholder {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 3px solid #e2e8f0;
-}
-
-body.theme-dark .avatar-preview img,
-body.theme-dark .avatar-placeholder {
-  border-color: #334155;
-}
-
-.avatar-placeholder {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 2rem;
-  font-weight: 700;
-  background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
-  color: white;
-}
-
-.avatar-upload {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-}
-
-.required {
-  color: #ef4444;
-}
-
-.info-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1.5rem;
-}
-
-.info-item {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.info-item label {
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: #64748b;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-body.theme-dark .info-item label {
-  color: #94a3b8;
-}
-
-.info-item span {
-  font-size: 1rem;
-  color: #1e293b;
-}
-
-body.theme-dark .info-item span {
-  color: #f1f5f9;
-}
-
-.badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
-  font-size: 0.875rem;
-  font-weight: 600;
-  width: fit-content;
-}
-
-.badge-primary {
-  background: #dbeafe;
-  color: #1e40af;
-}
-
-body.theme-dark .badge-primary {
-  background: #1e3a8a;
-  color: #bfdbfe;
-}
-
-.badge-secondary {
-  background: #f1f5f9;
-  color: #475569;
-}
-
-body.theme-dark .badge-secondary {
-  background: #334155;
-  color: #cbd5e1;
-}
-
-.badge-success {
-  background: #d1fae5;
-  color: #065f46;
-}
-
-body.theme-dark .badge-success {
-  background: #064e3b;
-  color: #a7f3d0;
-}
-
-.badge-danger {
-  background: #fee2e2;
-  color: #991b1b;
-}
-
-body.theme-dark .badge-danger {
-  background: #7f1d1d;
-  color: #fecaca;
-}
-
-@media (max-width: 768px) {
-  .form-row,
-  .info-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .profile-avatar-section {
-    flex-direction: column;
-    text-align: center;
-  }
-}
-</style>
 
 <script>
 // Avatar preview
@@ -377,7 +229,6 @@ document.getElementById('avatar').addEventListener('change', function(e) {
         img.style.height = '100px';
         img.style.borderRadius = '50%';
         img.style.objectFit = 'cover';
-        img.style.border = '3px solid #e2e8f0';
         preview.replaceWith(img);
         img.id = 'avatarPreview';
       }
