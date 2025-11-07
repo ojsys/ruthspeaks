@@ -34,8 +34,8 @@ class User {
     public static function create(array $data): int {
         $pdo = Database::pdo();
         $stmt = $pdo->prepare('
-            INSERT INTO users (email, username, password_hash, name, role, is_active)
-            VALUES (:email, :username, :password, :name, :role, :active)
+            INSERT INTO users (email, username, password_hash, name, role, is_active, avatar, bio)
+            VALUES (:email, :username, :password, :name, :role, :active, :avatar, :bio)
         ');
         $stmt->execute([
             ':email' => $data['email'],
@@ -43,7 +43,9 @@ class User {
             ':password' => $data['password_hash'],
             ':name' => $data['name'] ?? '',
             ':role' => $data['role'] ?? 'editor',
-            ':active' => $data['is_active'] ?? 1
+            ':active' => $data['is_active'] ?? 1,
+            ':avatar' => $data['avatar'] ?? null,
+            ':bio' => $data['bio'] ?? null
         ]);
         return (int)$pdo->lastInsertId();
     }
@@ -77,6 +79,14 @@ class User {
         if (isset($data['password_hash'])) {
             $fields[] = 'password_hash = :password';
             $params[':password'] = $data['password_hash'];
+        }
+        if (isset($data['role'])) {
+            $fields[] = 'role = :role';
+            $params[':role'] = $data['role'];
+        }
+        if (isset($data['is_active'])) {
+            $fields[] = 'is_active = :is_active';
+            $params[':is_active'] = $data['is_active'];
         }
 
         if (empty($fields)) return;

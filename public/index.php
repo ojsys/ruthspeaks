@@ -104,6 +104,12 @@ if ($uri === '/admin/settings') { \App\Controllers\AdminSettingsController::inde
 if ($uri === '/admin/profile' && $method === 'GET') { \App\Controllers\AdminProfileController::show(); exit; }
 if ($uri === '/admin/profile' && $method === 'POST') { \App\Controllers\AdminProfileController::update(); exit; }
 
+// Admin Users
+if ($uri === '/admin/users' && $method === 'GET') { \App\Controllers\AdminUsersController::index(); exit; }
+if ($uri === '/admin/users/new') { \App\Controllers\AdminUsersController::create(); exit; }
+if (preg_match('#^/admin/users/(\d+)/edit$#', $uri, $m)) { \App\Controllers\AdminUsersController::edit((int)$m[1]); exit; }
+if (preg_match('#^/admin/users/(\d+)/delete$#', $uri, $m) && $method === 'POST') { \App\Controllers\AdminUsersController::delete((int)$m[1]); exit; }
+
 // Admin logs
 if ($uri === '/admin/logs') { \App\Controllers\AdminLogsController::show(); exit; }
 

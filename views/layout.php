@@ -45,6 +45,19 @@ use const App\GIVEAWAY_PROGRESS_THRESHOLD;
         <a href="/">Home</a>
         <a href="/about">About</a>
         <a href="/contact">Let's Talk</a>
+        <?php if (isset($_SESSION['user'])): ?>
+          <a href="/admin" class="nav-user-link">
+            <?php if (!empty($_SESSION['user']['avatar'] ?? '')): ?>
+              <img src="<?= e($_SESSION['user']['avatar']) ?>" alt="<?= e($_SESSION['user']['name']) ?>" class="nav-avatar" />
+            <?php else: ?>
+              <span class="nav-avatar-initials"><?= strtoupper(substr($_SESSION['user']['name'] ?? 'U', 0, 1)) ?></span>
+            <?php endif; ?>
+            <span><?= e($_SESSION['user']['name']) ?></span>
+          </a>
+          <a href="/logout">Logout</a>
+        <?php else: ?>
+          <a href="/login">Login</a>
+        <?php endif; ?>
       </nav>
     </div>
   </header>
@@ -70,9 +83,28 @@ use const App\GIVEAWAY_PROGRESS_THRESHOLD;
   <aside class="nav-drawer" id="navDrawer" aria-hidden="true">
     <div class="nav-drawer-inner">
       <button class="btn" id="navClose" aria-label="Close menu">Close</button>
+      <?php if (isset($_SESSION['user'])): ?>
+        <div class="drawer-user-info">
+          <?php if (!empty($_SESSION['user']['avatar'] ?? '')): ?>
+            <img src="<?= e($_SESSION['user']['avatar']) ?>" alt="<?= e($_SESSION['user']['name']) ?>" class="drawer-avatar" />
+          <?php else: ?>
+            <div class="drawer-avatar-initials"><?= strtoupper(substr($_SESSION['user']['name'] ?? 'U', 0, 2)) ?></div>
+          <?php endif; ?>
+          <div>
+            <div class="drawer-user-name"><?= e($_SESSION['user']['name']) ?></div>
+            <div class="drawer-user-role"><?= e(ucfirst($_SESSION['user']['role'])) ?></div>
+          </div>
+        </div>
+      <?php endif; ?>
       <a href="/">Home</a>
       <a href="/about">About</a>
       <a href="/contact">Let's Talk</a>
+      <?php if (isset($_SESSION['user'])): ?>
+        <a href="/admin">Admin Dashboard</a>
+        <a href="/logout">Logout</a>
+      <?php else: ?>
+        <a href="/login">Login</a>
+      <?php endif; ?>
     </div>
   </aside>
   <div class="drawer-backdrop" id="drawerBackdrop" hidden></div>
