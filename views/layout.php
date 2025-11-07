@@ -33,6 +33,8 @@ use const App\GIVEAWAY_PROGRESS_THRESHOLD;
 
     gtag('config', 'G-S3JH4RF57X');
   </script>
+
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9118581005582748" crossorigin="anonymous"></script>
 </head>
 <body>
   <header class="app-bar" id="appBar">
