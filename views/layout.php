@@ -23,6 +23,16 @@ use const App\GIVEAWAY_PROGRESS_THRESHOLD;
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/assets/css/styles.css" />
   <?= App\view('partials/ad_slot', ['placement'=>'head']) ?>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S3JH4RF57X"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-S3JH4RF57X');
+  </script>
 </head>
 <body>
   <header class="app-bar" id="appBar">

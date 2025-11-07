@@ -63,6 +63,13 @@ if ($uri === '/about' && $method === 'GET') { \App\Controllers\PageController::a
 if ($uri === '/contact' && $method === 'GET') { \App\Controllers\ContactController::show(); exit; }
 if ($uri === '/contact/submit' && $method === 'POST') { \App\Controllers\ContactController::submit(); exit; }
 
+// Authentication
+if ($uri === '/login' && $method === 'GET') { \App\Controllers\AuthController::showLogin(); exit; }
+if ($uri === '/login' && $method === 'POST') { \App\Controllers\AuthController::login(); exit; }
+if ($uri === '/register' && $method === 'GET') { \App\Controllers\AuthController::showRegister(); exit; }
+if ($uri === '/register' && $method === 'POST') { \App\Controllers\AuthController::register(); exit; }
+if ($uri === '/logout' && $method === 'GET') { \App\Controllers\AuthController::logout(); exit; }
+
 // Admin
 if ($uri === '/admin/login') { \App\Controllers\AdminController::login(); exit; }
 if ($uri === '/admin/logout') { \App\Controllers\AdminController::logout(); exit; }
@@ -92,6 +99,10 @@ if (preg_match('#^/admin/pages/(\d+)/delete$#', $uri, $m)) { \App\Controllers\Ad
 
 // Admin Settings
 if ($uri === '/admin/settings') { \App\Controllers\AdminSettingsController::index(); exit; }
+
+// Admin Profile
+if ($uri === '/admin/profile' && $method === 'GET') { \App\Controllers\AdminProfileController::show(); exit; }
+if ($uri === '/admin/profile' && $method === 'POST') { \App\Controllers\AdminProfileController::update(); exit; }
 
 // Admin logs
 if ($uri === '/admin/logs') { \App\Controllers\AdminLogsController::show(); exit; }

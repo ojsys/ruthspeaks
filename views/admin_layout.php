@@ -31,6 +31,29 @@ $currentPath = $_SERVER['REQUEST_URI'] ?? '';
       <p class="admin-brand-subtitle">Admin Panel</p>
     </div>
 
+    <?php if (isset($_SESSION['user'])): ?>
+    <div class="admin-user-section">
+      <a href="/admin/profile" class="admin-user-card">
+        <div class="admin-user-avatar">
+          <?php if (!empty($_SESSION['user']['avatar'] ?? '')): ?>
+            <img src="<?= e($_SESSION['user']['avatar']) ?>" alt="<?= e($_SESSION['user']['name']) ?>" />
+          <?php else: ?>
+            <div class="admin-user-initials">
+              <?= strtoupper(substr($_SESSION['user']['name'] ?? 'U', 0, 2)) ?>
+            </div>
+          <?php endif; ?>
+        </div>
+        <div class="admin-user-info">
+          <div class="admin-user-name"><?= e($_SESSION['user']['name'] ?? 'User') ?></div>
+          <div class="admin-user-role"><?= e(ucfirst($_SESSION['user']['role'] ?? 'user')) ?></div>
+        </div>
+        <svg class="admin-user-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="9 18 15 12 9 6"/>
+        </svg>
+      </a>
+    </div>
+    <?php endif; ?>
+
     <nav class="admin-nav">
       <a href="/admin" class="admin-nav-item <?= $currentPath === '/admin' ? 'active' : '' ?>">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

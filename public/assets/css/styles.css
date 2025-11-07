@@ -1092,9 +1092,15 @@ body {
 
 @media (max-width: 768px) {
   .theme-toggle-floating {
-    width: 48px;
-    height: 48px;
-    top: 20px;
-    right: 20px;
+    width: 40px;
+    height: 40px;
+    top: 80px;
+    right: 16px;
+  }
+
+  .theme-toggle-floating .sun-icon,
+  .theme-toggle-floating .moon-icon {
+    width: 18px;
+    height: 18px;
   }
 }
