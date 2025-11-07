@@ -552,7 +552,8 @@
   margin-bottom: 8px;
 }
 
-.admin-user-card {
+.admin-user-card,
+.admin-user-card-legacy {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -565,6 +566,11 @@
 
 .admin-user-card:hover {
   background: var(--admin-sidebar-hover);
+}
+
+.admin-user-card-legacy {
+  cursor: default;
+  opacity: 0.9;
 }
 
 .admin-user-avatar {

@@ -103,7 +103,11 @@ use function App\csrf_field;
                       <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
                     </svg>
                   </a>
-                  <?php if ($user['id'] !== $_SESSION['user']['id']): ?>
+                  <?php
+                  $currentUserId = $_SESSION['user']['id'] ?? null;
+                  $canDelete = !$currentUserId || ($user['id'] !== $currentUserId);
+                  ?>
+                  <?php if ($canDelete): ?>
                     <form method="POST" action="/admin/users/<?= $user['id'] ?>/delete" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this user?');">
                       <?= csrf_field() ?>
                       <button type="submit" class="btn-icon btn-icon-danger" title="Delete">

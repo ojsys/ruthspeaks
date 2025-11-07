@@ -10,7 +10,11 @@ use function App\handleUploadFromForm;
 
 class AdminUsersController {
     private static function requireAdmin(): void {
-        if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
+        // Allow both old admin session and new user session with admin role
+        $isOldAdmin = isset($_SESSION['admin']);
+        $isNewAdmin = isset($_SESSION['user']) && $_SESSION['user']['role'] === 'admin';
+
+        if (!$isOldAdmin && !$isNewAdmin) {
             header('Location: /admin');
             exit;
         }
@@ -213,8 +217,11 @@ class AdminUsersController {
             }
         }
 
-        // Don't allow users to change their own role or status
-        if ($id !== (int)$_SESSION['user']['id']) {
+        // Don't allow users to change their own role or status (if using new user session)
+        $currentUserId = $_SESSION['user']['id'] ?? null;
+        $isEditingSelf = $currentUserId && ($id === (int)$currentUserId);
+
+        if (!$isEditingSelf) {
             $updateData['role'] = $role;
             $updateData['is_active'] = $isActive;
         }
@@ -249,8 +256,9 @@ class AdminUsersController {
         self::requireAdmin();
         verify_csrf();
 
-        // Don't allow deleting yourself
-        if ($id === (int)$_SESSION['user']['id']) {
+        // Don't allow deleting yourself (if using new user session)
+        $currentUserId = $_SESSION['user']['id'] ?? null;
+        if ($currentUserId && $id === (int)$currentUserId) {
             header('Location: /admin/users?error=self_delete');
             exit;
         }

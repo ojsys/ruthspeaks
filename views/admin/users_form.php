@@ -118,13 +118,17 @@ $formAction = $isEdit ? "/admin/users/{$user['id']}/edit" : "/admin/users/new";
         <h2>Account Settings</h2>
       </div>
       <div class="card-body">
+        <?php
+        $currentUserId = $_SESSION['user']['id'] ?? null;
+        $isEditingSelf = $isEdit && $currentUserId && $user['id'] === $currentUserId;
+        ?>
         <div class="form-group">
           <label for="role">Role <span class="required">*</span></label>
-          <select class="input" id="role" name="role" <?= $isEdit && $user['id'] === $_SESSION['user']['id'] ? 'disabled' : '' ?>>
+          <select class="input" id="role" name="role" <?= $isEditingSelf ? 'disabled' : '' ?>>
             <option value="editor" <?= ($old['role'] ?? $user['role'] ?? 'editor') === 'editor' ? 'selected' : '' ?>>Editor</option>
             <option value="admin" <?= ($old['role'] ?? $user['role'] ?? '') === 'admin' ? 'selected' : '' ?>>Admin</option>
           </select>
-          <?php if ($isEdit && $user['id'] === $_SESSION['user']['id']): ?>
+          <?php if ($isEditingSelf): ?>
             <small class="help-text">You cannot change your own role</small>
           <?php endif; ?>
         </div>
@@ -135,11 +139,11 @@ $formAction = $isEdit ? "/admin/users/{$user['id']}/edit" : "/admin/users/new";
               type="checkbox"
               name="is_active"
               <?= ($old['is_active'] ?? $user['is_active'] ?? 1) ? 'checked' : '' ?>
-              <?= $isEdit && $user['id'] === $_SESSION['user']['id'] ? 'disabled' : '' ?>
+              <?= $isEditingSelf ? 'disabled' : '' ?>
             />
             <span>Account is active</span>
           </label>
-          <?php if ($isEdit && $user['id'] === $_SESSION['user']['id']): ?>
+          <?php if ($isEditingSelf): ?>
             <small class="help-text">You cannot deactivate your own account</small>
           <?php endif; ?>
         </div>
