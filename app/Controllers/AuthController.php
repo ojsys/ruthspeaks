@@ -63,11 +63,20 @@ class AuthController {
         }
 
         // Create user
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+        // Debug logging
+        error_log("=== REGISTRATION DEBUG ===");
+        error_log("Plain password: " . $password);
+        error_log("Hashed password: " . $hashedPassword);
+        error_log("Hash length: " . strlen($hashedPassword));
+        error_log("==========================");
+
         $userId = User::create([
             'name' => $name,
             'email' => $email,
             'username' => $username,
-            'password_hash' => password_hash($password, PASSWORD_DEFAULT),
+            'password_hash' => $hashedPassword,
             'role' => 'editor',
             'is_active' => 1
         ]);
@@ -128,6 +137,20 @@ class AuthController {
         if (!$user) {
             $user = User::findByUsername($emailOrUsername);
         }
+
+        // Debug logging
+        error_log("=== LOGIN DEBUG ===");
+        error_log("User found: " . ($user ? 'YES' : 'NO'));
+        if ($user) {
+            error_log("User ID: " . $user['id']);
+            error_log("User email: " . $user['email']);
+            error_log("Password hash exists: " . (isset($user['password_hash']) ? 'YES' : 'NO'));
+            error_log("Password hash value: " . ($user['password_hash'] ?? 'NULL'));
+            error_log("Password hash length: " . (isset($user['password_hash']) ? strlen($user['password_hash']) : '0'));
+            error_log("Password from form: " . $password);
+            error_log("Password verify result: " . (password_verify($password, $user['password_hash']) ? 'SUCCESS' : 'FAILED'));
+        }
+        error_log("==================");
 
         if (!$user || !password_verify($password, $user['password_hash'])) {
             echo view('layout', [
