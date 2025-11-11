@@ -39,43 +39,66 @@ try {
     echo "Generated hash length: " . strlen($testHash) . "\n";
     echo "Verify test: " . (password_verify($testPassword, $testHash) ? "SUCCESS" : "FAILED") . "\n";
 
-    echo "\n=== SIMULATING LOGIN FOR LATEST USER ===\n";
-    if (!empty($users)) {
-        $latestUser = $users[0];
-        echo "Testing with User ID: {$latestUser['id']}\n";
-        echo "Email: {$latestUser['email']}\n";
+    echo "\n=== CREATING TEST USER ===\n";
+    require_once BASE_PATH . '/app/Models/User.php';
 
-        // Test with password123
-        $testPass = 'password123';
-        echo "\nAttempting to verify password: '{$testPass}'\n";
+    $testEmail = 'test_' . time() . '@example.com';
+    $testUsername = 'testuser_' . time();
+    $testPassword = 'password123';
+    $testPasswordHash = password_hash($testPassword, PASSWORD_DEFAULT);
 
-        // Get full user record
-        $stmt = $pdo->prepare("SELECT * FROM users WHERE id = :id");
-        $stmt->execute([':id' => $latestUser['id']]);
-        $fullUser = $stmt->fetch(\PDO::FETCH_ASSOC);
+    echo "Creating test user...\n";
+    echo "Email: {$testEmail}\n";
+    echo "Username: {$testUsername}\n";
+    echo "Password: {$testPassword}\n";
+    echo "Hash: " . substr($testPasswordHash, 0, 30) . "...\n";
 
-        if ($fullUser) {
-            echo "Password hash from DB: " . substr($fullUser['password_hash'], 0, 30) . "...\n";
-            echo "Password hash length: " . strlen($fullUser['password_hash']) . "\n";
-            echo "Hash type: " . (strpos($fullUser['password_hash'], '$2y$') === 0 ? 'bcrypt' : 'unknown') . "\n";
+    try {
+        $newUserId = \App\Models\User::create([
+            'name' => 'Test User',
+            'email' => $testEmail,
+            'username' => $testUsername,
+            'password_hash' => $testPasswordHash,
+            'role' => 'editor',
+            'is_active' => 1
+        ]);
 
-            $verifyResult = password_verify($testPass, $fullUser['password_hash']);
-            echo "Verification result: " . ($verifyResult ? "SUCCESS ✓" : "FAILED ✗") . "\n";
+        echo "User created with ID: {$newUserId}\n";
 
-            // Try to simulate exact login process
-            echo "\n--- Simulating findByEmail ---\n";
-            require_once BASE_PATH . '/app/Models/User.php';
-            $userByEmail = \App\Models\User::findByEmail($latestUser['email']);
-            if ($userByEmail) {
-                echo "User found by email: YES\n";
-                echo "Has password_hash key: " . (isset($userByEmail['password_hash']) ? 'YES' : 'NO') . "\n";
-                if (isset($userByEmail['password_hash'])) {
-                    echo "password_hash value: " . substr($userByEmail['password_hash'], 0, 30) . "...\n";
-                    $loginVerify = password_verify($testPass, $userByEmail['password_hash']);
-                    echo "Login verification would: " . ($loginVerify ? "SUCCESS ✓" : "FAIL ✗") . "\n";
-                }
+        // Now try to fetch and verify
+        echo "\n--- Testing Login Process ---\n";
+        $fetchedUser = \App\Models\User::findByEmail($testEmail);
+
+        if ($fetchedUser) {
+            echo "User fetched successfully\n";
+            echo "Fetched password_hash: " . substr($fetchedUser['password_hash'], 0, 30) . "...\n";
+            echo "Hash matches what we created: " . ($fetchedUser['password_hash'] === $testPasswordHash ? 'YES ✓' : 'NO ✗') . "\n";
+
+            $verifyResult = password_verify($testPassword, $fetchedUser['password_hash']);
+            echo "Password verification: " . ($verifyResult ? "SUCCESS ✓" : "FAILED ✗") . "\n";
+
+            if (!$verifyResult) {
+                echo "\nDEBUG INFO:\n";
+                echo "Original hash length: " . strlen($testPasswordHash) . "\n";
+                echo "Fetched hash length: " . strlen($fetchedUser['password_hash']) . "\n";
+                echo "Original hash: {$testPasswordHash}\n";
+                echo "Fetched hash: {$fetchedUser['password_hash']}\n";
             }
+        } else {
+            echo "ERROR: Could not fetch user after creation!\n";
         }
+
+        // Try with findByUsername too
+        echo "\n--- Testing with findByUsername ---\n";
+        $fetchedByUsername = \App\Models\User::findByUsername($testUsername);
+        if ($fetchedByUsername) {
+            echo "User fetched by username successfully\n";
+            $verifyResult2 = password_verify($testPassword, $fetchedByUsername['password_hash']);
+            echo "Password verification: " . ($verifyResult2 ? "SUCCESS ✓" : "FAILED ✗") . "\n";
+        }
+
+    } catch (Exception $e) {
+        echo "ERROR creating test user: " . $e->getMessage() . "\n";
     }
 
 } catch (Exception $e) {
