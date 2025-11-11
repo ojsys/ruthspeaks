@@ -39,6 +39,46 @@ try {
     echo "Generated hash length: " . strlen($testHash) . "\n";
     echo "Verify test: " . (password_verify($testPassword, $testHash) ? "SUCCESS" : "FAILED") . "\n";
 
+    echo "\n=== SIMULATING LOGIN FOR LATEST USER ===\n";
+    if (!empty($users)) {
+        $latestUser = $users[0];
+        echo "Testing with User ID: {$latestUser['id']}\n";
+        echo "Email: {$latestUser['email']}\n";
+
+        // Test with password123
+        $testPass = 'password123';
+        echo "\nAttempting to verify password: '{$testPass}'\n";
+
+        // Get full user record
+        $stmt = $pdo->prepare("SELECT * FROM users WHERE id = :id");
+        $stmt->execute([':id' => $latestUser['id']]);
+        $fullUser = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+        if ($fullUser) {
+            echo "Password hash from DB: " . substr($fullUser['password_hash'], 0, 30) . "...\n";
+            echo "Password hash length: " . strlen($fullUser['password_hash']) . "\n";
+            echo "Hash type: " . (strpos($fullUser['password_hash'], '$2y$') === 0 ? 'bcrypt' : 'unknown') . "\n";
+
+            $verifyResult = password_verify($testPass, $fullUser['password_hash']);
+            echo "Verification result: " . ($verifyResult ? "SUCCESS ✓" : "FAILED ✗") . "\n";
+
+            // Try to simulate exact login process
+            echo "\n--- Simulating findByEmail ---\n";
+            require_once BASE_PATH . '/app/Models/User.php';
+            $userByEmail = \App\Models\User::findByEmail($latestUser['email']);
+            if ($userByEmail) {
+                echo "User found by email: YES\n";
+                echo "Has password_hash key: " . (isset($userByEmail['password_hash']) ? 'YES' : 'NO') . "\n";
+                if (isset($userByEmail['password_hash'])) {
+                    echo "password_hash value: " . substr($userByEmail['password_hash'], 0, 30) . "...\n";
+                    $loginVerify = password_verify($testPass, $userByEmail['password_hash']);
+                    echo "Login verification would: " . ($loginVerify ? "SUCCESS ✓" : "FAIL ✗") . "\n";
+                }
+            }
+        }
+    }
+
 } catch (Exception $e) {
     echo "ERROR: " . $e->getMessage() . "\n";
+    echo "Stack trace: " . $e->getTraceAsString() . "\n";
 }
