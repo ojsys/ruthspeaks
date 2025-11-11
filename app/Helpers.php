@@ -101,6 +101,28 @@ function injectInArticleAds(string $html): string {
     return $result;
 }
 
+function requireAdmin(): void {
+    // Check if user is logged in and has admin role
+    if (!isset($_SESSION['user'])) {
+        $_SESSION['intended'] = $_SERVER['REQUEST_URI'] ?? '/admin';
+        header('Location: /login');
+        exit;
+    }
+
+    if ($_SESSION['user']['role'] !== 'admin') {
+        http_response_code(403);
+        echo view('layout', [
+            'title' => 'Access Denied',
+            'content' => '<div class="container"><h1>Access Denied</h1><p>You do not have permission to access this page.</p><p><a href="/">Return Home</a></p></div>'
+        ]);
+        exit;
+    }
+}
+
+function isAdmin(): bool {
+    return isset($_SESSION['user']) && $_SESSION['user']['role'] === 'admin';
+}
+
 function ensureUploadDir(): string {
     $dir = BASE_PATH . '/public/uploads';
     if (!is_dir($dir)) { @mkdir($dir, 0775, true); }

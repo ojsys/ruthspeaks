@@ -12,7 +12,10 @@ use function App\verify_csrf;
 
 class AdminTaxonomyController {
     private static function guard(): void {
-        \App\requireAdmin();
+        if (!isset($_SESSION['admin'])) {
+            header('Location: /admin/login');
+            exit;
+        }
     }
 
     public static function categories(): void {

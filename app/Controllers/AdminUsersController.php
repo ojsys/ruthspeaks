@@ -10,14 +10,7 @@ use function App\handleUploadFromForm;
 
 class AdminUsersController {
     private static function requireAdmin(): void {
-        // Allow both old admin session and new user session with admin role
-        $isOldAdmin = isset($_SESSION['admin']);
-        $isNewAdmin = isset($_SESSION['user']) && $_SESSION['user']['role'] === 'admin';
-
-        if (!$isOldAdmin && !$isNewAdmin) {
-            header('Location: /admin');
-            exit;
-        }
+        \App\requireAdmin();
     }
 
     public static function index(): void {
