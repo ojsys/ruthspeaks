@@ -8,7 +8,10 @@ $contentHtml = injectInArticleAds($contentHtml);
 ?>
 <main>
   <?php if (!empty($post['cover_image'])): ?>
-    <div class="post-banner" style="background-image:url('<?= e($post['cover_image']) ?>');">
+    <div class="post-banner">
+      <div class="post-banner-image-wrapper">
+        <img src="<?= e($post['cover_image']) ?>" alt="<?= e($post['title']) ?>" class="post-banner-image" />
+      </div>
       <div class="container">
         <div class="banner-content">
           <h1><?= e($post['title']) ?></h1>
