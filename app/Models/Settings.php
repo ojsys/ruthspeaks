@@ -20,8 +20,9 @@ class Settings {
         $stmt = $pdo->prepare('
             INSERT INTO site_settings (setting_key, setting_value, setting_type)
             VALUES (:key, :value, :type)
-            ON DUPLICATE KEY UPDATE setting_value = :value, setting_type = :type
+            ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value), setting_type = VALUES(setting_type)
         ');
+
         $stmt->execute([
             ':key' => $key,
             ':value' => $value,

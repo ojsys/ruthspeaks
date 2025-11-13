@@ -99,10 +99,10 @@ class AdminProfileController {
         // Handle avatar upload
         if (isset($_FILES['avatar']) && $_FILES['avatar']['error'] === UPLOAD_ERR_OK) {
             $result = handleUploadFromForm('avatar');
-            if (isset($result['error'])) {
-                $errors[] = $result['error'];
+            if ($result) {
+                $updateData['avatar'] = $result;
             } else {
-                $updateData['avatar'] = $result['url'];
+                $errors[] = 'Failed to upload avatar. Please ensure the file is a valid image (JPG, PNG, GIF, or WebP) under 5MB.';
             }
         }
 

@@ -17,6 +17,17 @@
   </div>
 <?php endif; ?>
 
+<?php if (isset($error)): ?>
+  <div class="admin-alert admin-alert-error">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="10"/>
+      <line x1="12" y1="8" x2="12" y2="12"/>
+      <line x1="12" y1="16" x2="12.01" y2="16"/>
+    </svg>
+    <div><strong>Error!</strong> <?= e($error) ?></div>
+  </div>
+<?php endif; ?>
+
 <form method="post" enctype="multipart/form-data">
   <?= csrf_field() ?>
 
