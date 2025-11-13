@@ -2,6 +2,10 @@
 use function App\e;
 use const App\SITE_NAME;
 use const App\GIVEAWAY_PROGRESS_THRESHOLD;
+
+// Load site logo and favicon from settings
+$siteLogo = \App\Models\Settings::get('site_logo', '');
+$siteFavicon = \App\Models\Settings::get('site_favicon', '');
 ?>
 <!doctype html>
 <html lang="en">
@@ -9,6 +13,9 @@ use const App\GIVEAWAY_PROGRESS_THRESHOLD;
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title><?= e($title ?? SITE_NAME) ?></title>
+  <?php if (!empty($siteFavicon)): ?>
+  <link rel="icon" type="image/x-icon" href="<?= e($siteFavicon) ?>" />
+  <?php endif; ?>
   <?php if (!empty($meta['description'])): ?>
   <meta name="description" content="<?= e($meta['description']) ?>" />
   <?php endif; ?>
@@ -42,7 +49,13 @@ use const App\GIVEAWAY_PROGRESS_THRESHOLD;
       <button class="hamburger" id="navOpen" aria-label="Open menu" aria-controls="navDrawer" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
-      <a class="brand" href="/">RuthSpeaksTruth</a>
+      <a class="brand" href="/">
+        <?php if (!empty($siteLogo)): ?>
+          <img src="<?= e($siteLogo) ?>" alt="<?= e(SITE_NAME) ?>" class="brand-logo" />
+        <?php else: ?>
+          RuthSpeaksTruth
+        <?php endif; ?>
+      </a>
       <nav class="nav">
         <a href="/">Home</a>
         <a href="/about">About</a>

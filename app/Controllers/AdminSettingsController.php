@@ -20,11 +20,11 @@ class AdminSettingsController {
             verify_csrf();
 
             try {
-                // Handle image uploads
-                $siteLogo = handleUploadFromForm('site_logo') ?: (trim($_POST['site_logo_url'] ?? '') ?: Settings::get('site_logo'));
-                $siteFavicon = handleUploadFromForm('site_favicon') ?: (trim($_POST['site_favicon_url'] ?? '') ?: Settings::get('site_favicon'));
-                $heroImage = handleUploadFromForm('hero_image') ?: (trim($_POST['hero_image_url'] ?? '') ?: Settings::get('hero_image'));
-                $aboutImage = handleUploadFromForm('about_page_image') ?: (trim($_POST['about_page_image_url'] ?? '') ?: Settings::get('about_page_image'));
+                // Handle image uploads with clear functionality
+                $siteLogo = isset($_POST['clear_site_logo']) ? '' : (handleUploadFromForm('site_logo') ?: (trim($_POST['site_logo_url'] ?? '') ?: Settings::get('site_logo')));
+                $siteFavicon = isset($_POST['clear_site_favicon']) ? '' : (handleUploadFromForm('site_favicon') ?: (trim($_POST['site_favicon_url'] ?? '') ?: Settings::get('site_favicon')));
+                $heroImage = isset($_POST['clear_hero_image']) ? '' : (handleUploadFromForm('hero_image') ?: (trim($_POST['hero_image_url'] ?? '') ?: Settings::get('hero_image')));
+                $aboutImage = isset($_POST['clear_about_page_image']) ? '' : (handleUploadFromForm('about_page_image') ?: (trim($_POST['about_page_image_url'] ?? '') ?: Settings::get('about_page_image')));
 
                 // Save all settings
                 Settings::set('site_logo', $siteLogo, 'image');

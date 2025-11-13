@@ -40,6 +40,21 @@
       <div class="admin-card-body">
         <div class="admin-form-group">
           <label class="admin-form-label" for="site-logo-file">Site Logo</label>
+          <?php if (!empty($settings['site_logo'])): ?>
+            <div style="margin-bottom: 12px; padding: 12px; background: var(--admin-bg-secondary); border-radius: 8px; border: 1px solid var(--admin-border);">
+              <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                <img src="<?= e($settings['site_logo']) ?>" alt="Current logo" style="max-width: 150px; max-height: 60px; object-fit: contain; border-radius: 4px;" />
+                <div style="flex: 1;">
+                  <div style="font-size: 0.875rem; color: var(--admin-text-secondary); margin-bottom: 4px;">Current logo:</div>
+                  <div style="font-size: 0.75rem; color: var(--admin-text-muted); word-break: break-all; font-family: monospace;"><?= e($settings['site_logo']) ?></div>
+                </div>
+              </div>
+              <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.875rem;">
+                <input type="checkbox" name="clear_site_logo" value="1" style="cursor: pointer;" />
+                <span style="color: var(--admin-danger);">Clear/Remove logo</span>
+              </label>
+            </div>
+          <?php endif; ?>
           <input
             type="file"
             id="site-logo-file"
@@ -56,15 +71,25 @@
             placeholder="https://..."
             style="margin-top: 8px;"
           />
-          <?php if (!empty($settings['site_logo'])): ?>
-            <div style="margin-top: 12px;">
-              <img src="<?= e($settings['site_logo']) ?>" alt="Current logo" style="max-width: 200px; height: auto; border-radius: 8px; border: 1px solid var(--admin-border);" />
-            </div>
-          <?php endif; ?>
         </div>
 
         <div class="admin-form-group">
           <label class="admin-form-label" for="site-favicon-file">Favicon</label>
+          <?php if (!empty($settings['site_favicon'])): ?>
+            <div style="margin-bottom: 12px; padding: 12px; background: var(--admin-bg-secondary); border-radius: 8px; border: 1px solid var(--admin-border);">
+              <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                <img src="<?= e($settings['site_favicon']) ?>" alt="Current favicon" style="max-width: 64px; max-height: 64px; object-fit: contain; border-radius: 4px;" />
+                <div style="flex: 1;">
+                  <div style="font-size: 0.875rem; color: var(--admin-text-secondary); margin-bottom: 4px;">Current favicon:</div>
+                  <div style="font-size: 0.75rem; color: var(--admin-text-muted); word-break: break-all; font-family: monospace;"><?= e($settings['site_favicon']) ?></div>
+                </div>
+              </div>
+              <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.875rem;">
+                <input type="checkbox" name="clear_site_favicon" value="1" style="cursor: pointer;" />
+                <span style="color: var(--admin-danger);">Clear/Remove favicon</span>
+              </label>
+            </div>
+          <?php endif; ?>
           <input
             type="file"
             id="site-favicon-file"
@@ -81,11 +106,6 @@
             placeholder="https://..."
             style="margin-top: 8px;"
           />
-          <?php if (!empty($settings['site_favicon'])): ?>
-            <div style="margin-top: 12px;">
-              <img src="<?= e($settings['site_favicon']) ?>" alt="Current favicon" style="max-width: 64px; height: auto; border-radius: 4px; border: 1px solid var(--admin-border);" />
-            </div>
-          <?php endif; ?>
         </div>
 
         <div class="admin-form-group" style="margin-bottom: 0;">
@@ -110,6 +130,18 @@
       <div class="admin-card-body">
         <div class="admin-form-group">
           <label class="admin-form-label" for="hero-image-file">Hero Image</label>
+          <?php if (!empty($settings['hero_image'])): ?>
+            <div style="margin-bottom: 12px; padding: 12px; background: var(--admin-bg-secondary); border-radius: 8px; border: 1px solid var(--admin-border);">
+              <div style="margin-bottom: 8px;">
+                <img src="<?= e($settings['hero_image']) ?>" alt="Current hero" style="max-width: 100%; height: auto; border-radius: 4px;" />
+              </div>
+              <div style="font-size: 0.75rem; color: var(--admin-text-muted); word-break: break-all; font-family: monospace; margin-bottom: 8px;"><?= e($settings['hero_image']) ?></div>
+              <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.875rem;">
+                <input type="checkbox" name="clear_hero_image" value="1" style="cursor: pointer;" />
+                <span style="color: var(--admin-danger);">Clear/Remove hero image</span>
+              </label>
+            </div>
+          <?php endif; ?>
           <input
             type="file"
             id="hero-image-file"
@@ -126,15 +158,22 @@
             placeholder="https://..."
             style="margin-top: 8px;"
           />
-          <?php if (!empty($settings['hero_image'])): ?>
-            <div style="margin-top: 12px;">
-              <img src="<?= e($settings['hero_image']) ?>" alt="Current hero" style="max-width: 100%; height: auto; border-radius: 8px; border: 1px solid var(--admin-border);" />
-            </div>
-          <?php endif; ?>
         </div>
 
         <div class="admin-form-group" style="margin-bottom: 0;">
           <label class="admin-form-label" for="about-image-file">About Page Image</label>
+          <?php if (!empty($settings['about_page_image'])): ?>
+            <div style="margin-bottom: 12px; padding: 12px; background: var(--admin-bg-secondary); border-radius: 8px; border: 1px solid var(--admin-border);">
+              <div style="margin-bottom: 8px;">
+                <img src="<?= e($settings['about_page_image']) ?>" alt="Current about page image" style="max-width: 100%; height: auto; border-radius: 4px;" />
+              </div>
+              <div style="font-size: 0.75rem; color: var(--admin-text-muted); word-break: break-all; font-family: monospace; margin-bottom: 8px;"><?= e($settings['about_page_image']) ?></div>
+              <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.875rem;">
+                <input type="checkbox" name="clear_about_page_image" value="1" style="cursor: pointer;" />
+                <span style="color: var(--admin-danger);">Clear/Remove about page image</span>
+              </label>
+            </div>
+          <?php endif; ?>
           <input
             type="file"
             id="about-image-file"
@@ -151,11 +190,6 @@
             placeholder="https://..."
             style="margin-top: 8px;"
           />
-          <?php if (!empty($settings['about_page_image'])): ?>
-            <div style="margin-top: 12px;">
-              <img src="<?= e($settings['about_page_image']) ?>" alt="Current about page image" style="max-width: 100%; height: auto; border-radius: 8px; border: 1px solid var(--admin-border);" />
-            </div>
-          <?php endif; ?>
         </div>
       </div>
     </div>
