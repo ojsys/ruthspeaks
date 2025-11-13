@@ -11,8 +11,13 @@ $contentHtml = injectInArticleAds($contentHtml);
     <div class="post-banner" style="background-image:url('<?= e($post['cover_image']) ?>');">
       <div class="container">
         <div class="banner-content">
+          <?php if (!empty($post['category_name'])): ?>
+            <div style="display: inline-block; background: rgba(37, 99, 235, 0.9); color: #fff; padding: 8px 16px; border-radius: 8px; font-size: 0.875rem; font-weight: 600; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 0.05em;">
+              <?= e($post['category_name']) ?>
+            </div>
+          <?php endif; ?>
           <h1><?= e($post['title']) ?></h1>
-          <div class="card-meta">
+          <div class="card-meta" style="font-size: 1rem; opacity: 0.9;">
             <?= e((int)$post['estimated_read_minutes']) ?> min read
             <?php if (!empty($post['published_at'])): ?>• <?= date('M j, Y', strtotime($post['published_at'])) ?><?php endif; ?>
           </div>
